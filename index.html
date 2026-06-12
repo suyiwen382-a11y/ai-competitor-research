@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 时代的外部输入 · 同业怎么用 AI｜丽兹行</title>
+<style>
+  :root{
+    --bg:#f6f2e9; --paper:#fffdf8; --ink:#221e17; --ink2:#4b4438; --mute:#8b8173; --line:#e8e1d2;
+    --gold:#9a7a39; --gold2:#c2a35d; --goldbg:#f4ecd9;
+    --red:#a4422e; --blue:#2f5d79; --rust:#b06a23; --plum:#6c3d68; --green:#4c7a4f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:14px;line-height:1.7;
+    background-image:radial-gradient(circle at 18% -5%,#fbf6ea 0,transparent 42%)}
+  .serif{font-family:"Songti SC","STSong",Georgia,"Times New Roman",serif}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;background:rgba(246,242,233,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav .in{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,56px);display:flex;align-items:center;height:54px;gap:26px}
+  nav .brand{font-weight:700;letter-spacing:.04em;color:var(--ink)}
+  nav .brand i{color:var(--gold);font-style:normal}
+  nav a{color:var(--mute);text-decoration:none;font-size:13px;position:relative;padding:4px 0}
+  nav a:hover{color:var(--ink)}
+  nav a.on{color:var(--ink)} nav a.on::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--gold)}
+  nav .sp{flex:1}
+
+  /* hero */
+  .hero{padding:56px 0 30px;border-bottom:1px solid var(--line)}
+  .kick{font-size:12px;letter-spacing:.32em;color:var(--gold);font-weight:700;text-transform:uppercase}
+  h1{font-size:clamp(30px,4.4vw,50px);line-height:1.18;margin:14px 0 0;font-weight:600;letter-spacing:.01em}
+  .hero .lead{font-size:16px;color:var(--ink2);margin-top:16px;max-width:760px}
+  .hr-gold{width:64px;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));margin:22px 0 0;border-radius:2px}
+  .meta{margin-top:20px;font-size:12.5px;color:var(--mute);display:flex;gap:18px;flex-wrap:wrap}
+  .meta b{color:var(--ink2)}
+
+  /* section */
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  .sechead{display:flex;align-items:baseline;gap:16px;margin-bottom:26px}
+  .secno{font-size:34px;color:var(--gold2);font-weight:600;line-height:1}
+  .sechead h2{font-size:24px;margin:0;font-weight:600;letter-spacing:.01em}
+  .sechead .sub{color:var(--mute);font-size:13px;margin-left:auto;align-self:center}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+  .panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .panel h3{margin:0 0 10px;font-size:15px;font-weight:700}
+  .panel .lbl{font-size:11px;letter-spacing:.14em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:9px}
+  .prose{font-size:14px;line-height:1.85;color:var(--ink2);margin:0;text-align:justify}
+  ul.tick{margin:0;padding:0;list-style:none}
+  ul.tick li{position:relative;padding-left:20px;margin-bottom:8px;font-size:13.5px;line-height:1.6;color:var(--ink2)}
+  ul.tick li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--gold2)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;line-height:1.7;border:1px solid transparent;white-space:nowrap}
+  .c-red{background:#f7e7e2;color:var(--red);border-color:#e7c7bd} .c-blue{background:#e4edf2;color:var(--blue);border-color:#c6d8e2}
+  .c-rust{background:#f6e8d6;color:var(--rust);border-color:#ecd2b0} .c-plum{background:#f1e6f0;color:var(--plum);border-color:#ddc6db}
+  .c-gray{background:#efeadf;color:#7a7264;border-color:#e2dbcb} .c-green{background:#e6efe4;color:var(--green);border-color:#c8ddc7}
+
+  /* 概念：四维 / 价值链 / 对标 */
+  .dimrow{display:grid;grid-template-columns:80px 1fr;gap:8px 12px;align-items:center;font-size:12.5px;margin-bottom:8px}
+  .dimrow .dn{color:var(--ink);font-weight:600}
+  .dimrow .dd{color:var(--mute)}
+  .vchain{display:flex;align-items:center;gap:0;margin:8px 0;flex-wrap:wrap}
+  .vstage{flex:1;min-width:74px;text-align:center;font-size:12px;padding:9px 4px;border:1px solid var(--line);border-radius:9px;margin:3px;background:#fff;color:var(--mute)}
+  .vstage.us{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);font-weight:700}
+  .vstage .a{font-size:18px;color:#cfc6b2;margin:0 2px}
+
+  /* 结论：推理链 */
+  .chain{counter-reset:c;display:grid;gap:14px}
+  .step{display:grid;grid-template-columns:42px 1fr;gap:16px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .step .n{counter-increment:c;font-size:22px;color:var(--gold2);font-weight:600;line-height:1.2}
+  .step .n::before{content:counter(c)}
+  .step p{margin:0;font-size:14.5px;line-height:1.8;color:var(--ink2)}
+  .step b{color:var(--ink)}
+  .kicker{background:linear-gradient(180deg,#fbf4e3,#f6ecd6);border:1px solid #e8d6a8;border-radius:14px;padding:18px 22px;margin-top:16px;font-size:15px;line-height:1.8}
+  .kicker b{color:var(--gold)}
+
+  /* 矩阵 */
+  .matrix{position:relative;height:430px;background:var(--paper);border:1px solid var(--line);border-radius:14px;margin-top:8px}
+  .quad{position:absolute;font-size:11px;font-weight:700;opacity:.72;letter-spacing:.02em}
+  .matrix .mid{position:absolute;left:0;right:0;top:50%;border-top:1px dashed #e6dcc2}
+  .matrix .vl{position:absolute;top:0;bottom:0;border-left:1px dashed #f0ead9}
+  .matrix .yt{position:absolute;top:8px;left:10px;font-size:11px;color:var(--red);font-weight:700}
+  .matrix .yb{position:absolute;bottom:8px;left:10px;font-size:11px;color:var(--green);font-weight:700}
+  .matrix .ax{position:absolute;bottom:-18px;width:100%;display:flex;justify-content:space-between;padding:0 6px;font-size:10.5px;color:var(--mute)}
+  .dot{position:absolute;transform:translate(-50%,-50%);font-size:10.5px;padding:2px 8px;border-radius:11px;white-space:nowrap;border:1px solid}
+  .dot.augment{background:#e6efe4;color:var(--green);border-color:#c8ddc7}
+  .dot.replace{background:#f7e7e2;color:var(--red);border-color:#e7c7bd}
+  .dot.neutral{background:#efeadf;color:#7a7264;border-color:#e2dbcb}
+  .dot.us{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700;box-shadow:0 2px 8px rgba(154,122,57,.4);z-index:9}
+
+  /* 措施 */
+  .mez{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px}
+  @media(max-width:900px){.mez{grid-template-columns:1fr}}
+  .mez .panel h3{display:flex;align-items:center;gap:8px}
+  .tagdot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .bench{font-size:11.5px;color:var(--gold);margin-top:7px}
+  .q4{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:6px}
+  @media(max-width:700px){.q4{grid-template-columns:1fr}}
+  .qi{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:11px 14px;font-size:13px}
+  .qi b{color:var(--gold)}
+
+  /* 图鉴 */
+  .filters{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+  .fgroup{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .fgroup .gl{font-size:11px;letter-spacing:.1em;color:var(--mute);font-weight:700;margin-right:4px;text-transform:uppercase}
+  .fbtn{border:1px solid var(--line);background:var(--paper);color:var(--mute);border-radius:20px;padding:6px 15px;font-size:12.5px;cursor:pointer;transition:.15s}
+  .fbtn:hover{border-color:var(--gold2)}
+  .fbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .fbtn.on.tier{background:var(--gold);border-color:var(--gold)}
+  .searchbox{border:1px solid var(--line);background:var(--paper);border-radius:20px;padding:7px 16px;font-size:13px;font-family:inherit;color:var(--ink);min-width:240px;outline:none}
+  .searchbox:focus{border-color:var(--gold2)}
+  .card{transition:box-shadow .3s}
+
+  #atlas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+  @media(max-width:1040px){#atlas{grid-template-columns:1fr}}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:0 1px 2px rgba(60,50,30,.03),0 8px 24px rgba(60,50,30,.04)}
+  .ch{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ch .nm{font-size:20px;font-weight:600}
+  .tier{font-size:11px;font-weight:700;padding:2px 9px;border-radius:6px;letter-spacing:.04em}
+  .t-must{background:var(--gold);color:#fff} .t-rec{background:transparent;color:var(--gold);border:1px solid var(--gold2)} .t-opt{background:#efeadf;color:#9a9180}
+  .ch .site{font-size:11.5px;color:var(--blue);text-decoration:none;border:1px solid #c6d8e2;background:#eef4f7;border-radius:6px;padding:1px 8px;margin-left:auto}
+  .ch .cn{width:100%;color:var(--mute);font-size:12.5px;margin-top:-2px}
+  .badges{margin:11px 0 0;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+
+  .dims{margin:14px 0 2px;padding:12px 14px;background:#fbf8f0;border:1px solid #efe7d6;border-radius:11px}
+  .dims .dt{font-size:10px;letter-spacing:.14em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+  .db{display:grid;grid-template-columns:52px 1fr;gap:6px 10px;align-items:center;margin-bottom:6px}
+  .db .k{font-size:11.5px;color:var(--ink2)}
+  .track{height:7px;background:#ece4d3;border-radius:4px;overflow:hidden}
+  .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold2),var(--gold))}
+  .lvcap{font-size:12px;color:var(--mute);margin-top:7px}.lvcap b{color:var(--ink2)}
+  .ladder{display:grid;gap:7px}
+  .lvrow{display:grid;grid-template-columns:46px 96px 1fr;gap:12px;align-items:center;font-size:12.5px;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:#fff}
+  .lvrow.future{background:#f6f1e6;border-color:#e6d6ad;border-style:dashed}
+  .lvrow b{color:var(--ink)} .lvrow span.d{color:var(--mute)}
+  .lpill{font-weight:700;font-size:12px;padding:3px 0;border-radius:7px;background:var(--goldbg);color:var(--gold);text-align:center}
+  .lvrow.future .lpill{background:#efe2c0;color:#8a6a1e}
+  .laddersrc{font-size:11px;color:var(--mute);margin-top:11px}.laddersrc a{color:var(--blue);text-decoration:none}
+  .lvtagbox{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin:15px 0 2px}
+  .lvtag{font-weight:700;font-size:14px;padding:5px 15px;border-radius:9px;background:linear-gradient(180deg,#f6ecd6,#efe2c0);color:var(--gold);border:1px solid #e6d6ad;cursor:pointer;user-select:none;white-space:nowrap}
+  .lvtag:hover{box-shadow:0 0 0 2px var(--gold2)}
+  .lvtag.f{background:linear-gradient(180deg,#efe0f0,#e3cfe2);color:var(--plum);border-color:#ddc6db}
+  .lvcap2{font-size:12.5px;color:var(--mute);flex:1;min-width:150px}
+  .lvdist{display:flex;gap:6px;align-items:flex-end;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 12px}
+  .lvcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+  .lvcol .h{font-size:10px;color:var(--mute);text-align:center;line-height:1.3;min-height:30px}
+  .lvcol .h b{display:block;color:var(--ink);font-size:13px}
+  .lvcol.fut{background:#f8f3ea;border-radius:8px;padding-top:4px}.lvcol.fut .h b{color:var(--plum)}
+  .lvchip{font-size:9.5px;padding:2px 5px;border-radius:6px;background:#efeadf;color:#555;border:1px solid #e2dbcb;white-space:nowrap;width:100%;text-align:center}
+  .lvchip.us{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700}
+  .lvempty{font-size:10px;color:#bcae8e;padding:8px 0}
+
+  .kv{display:grid;grid-template-columns:78px 1fr;gap:9px 15px;align-items:start;margin-top:16px}
+  .kv .k{color:var(--mute);font-size:12px;padding-top:2px}
+  .kv .v{font-size:13.5px;line-height:1.72;color:var(--ink2)}
+  .flowcap{font-size:11px;color:var(--mute);margin:0 0 4px}
+  .flow{position:relative;display:flex;justify-content:space-between;margin:4px 2px 6px}
+  .flow::before{content:"";position:absolute;top:7px;left:9px;right:9px;height:2px;background:#e8e1d2;z-index:0}
+  .fn{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;flex:1;text-align:center;padding:0 1px}
+  .fd{width:13px;height:13px;border-radius:50%;background:#d8cfbb;border:3px solid var(--paper)}
+  .fl{font-size:10px;margin-top:5px;color:#b3a994;line-height:1.2}
+  .fn.on .fd{background:var(--green);box-shadow:0 0 0 3px #d7e6d6} .fn.on .fl{color:var(--green);font-weight:700}
+  .fn.moat .fd{background:var(--gold)} .fn.moat .fl{color:var(--gold);font-weight:600}
+  .zoom{display:flex;align-items:center;gap:8px;margin:9px 0 6px;color:var(--mute);font-size:11px}
+  .zoom .ln{flex:0 0 18px;height:0;border-top:1px dashed #ccc3ad}
+  .legend{font-size:10.5px;color:var(--mute);margin-top:7px}
+  .lg{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:0;margin:0 4px 0 12px}
+  .lg.g{background:var(--green)} .lg.y{background:var(--gold)} .lg.n{background:#d8cfbb}
+  .segnote{font-size:11.5px;color:var(--rust);background:#f7eee0;border:1px solid #ecd9bd;border-radius:8px;padding:6px 10px;margin-bottom:10px}
+  .expbtn{display:inline-block;text-decoration:none;border:1px solid #c8ddc7;border-radius:9px;padding:6px 15px;font-size:13px;color:var(--green);background:#eef5ed}
+  .expbtn.dead{color:#aaa;border-style:dashed;border-color:var(--line);background:#faf8f2;pointer-events:none}
+  .feel{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-family:inherit;font-size:13px;line-height:1.6;min-height:50px;background:#fcfaf4;color:var(--ink2);resize:vertical}
+  .savebtn{border:1px solid #c8ddc7;background:#e6efe4;color:var(--green);border-radius:8px;padding:5px 15px;font-size:12.5px;cursor:pointer}
+  .feeltime{font-size:11px;color:var(--mute)}
+  .src{font-size:11px;color:var(--mute);margin-top:13px;border-top:1px dashed var(--line);padding-top:9px}
+  .src a{color:var(--blue);text-decoration:none}
+  /* 升级：AI 演变时间线 / 主线对齐 / 来源可信度 */
+  .c-fresh{background:#f6ecd2;color:var(--gold);border-color:#e6d6ad}
+  .aihead{font-size:12px;color:var(--mute);margin-bottom:3px}
+  .cred{font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:9px;margin-left:7px;white-space:nowrap}
+  .cr-o{color:var(--green);background:#e6efe4;border:1px solid #c8ddc7}
+  .cr-m{color:var(--rust);background:#f7eee0;border:1px solid #ecd9bd}
+  .cr-p{color:var(--red);background:#f7e7e2;border:1px solid #e7c7bd}
+  .tl{margin:6px 0 2px}
+  .tl .ti{position:relative;padding:0 0 13px 18px;border-left:2px solid #e6dec9}
+  .tl .ti:last-child{border-left-color:transparent;padding-bottom:1px}
+  .tl .ti::before{content:"";position:absolute;left:-6px;top:3px;width:10px;height:10px;border-radius:50%;background:#cbbf9f;border:2px solid var(--paper)}
+  .tl .ti.now::before{background:var(--gold);box-shadow:0 0 0 3px rgba(154,122,57,.16)}
+  .tl .tph{font-weight:700;font-size:12.5px;color:var(--ink2)}
+  .tl .ti.now .tph{color:var(--gold)}
+  .tl .tdate{color:var(--gold);font-weight:700;font-size:11px;margin-left:6px;letter-spacing:.02em}
+  .tl .tlv{font-size:11px;color:var(--gold);font-weight:700;margin-left:6px}
+  .tl .tdesc{font-size:12.5px;line-height:1.6;color:var(--ink2);margin-top:2px}
+  .mls{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:9px}
+  .mlhint{font-size:10.5px;color:var(--mute);letter-spacing:.04em}
+  .ml{font-size:11px;font-weight:700;padding:2px 9px;border-radius:11px;border:1px solid;white-space:nowrap}
+  .ml-a{color:var(--green);background:#eef6ec;border-color:#cfe3cc}
+  .ml-b{color:var(--gold);background:#f8f1de;border-color:#e6d6ad}
+  .ml-c{color:var(--blue);background:#eaf1f5;border-color:#cadbe4}
+  .ml-d{color:var(--plum);background:#f4ecf3;border-color:#ddc6db}
+  .src .sg{font-size:9.5px;font-weight:700;padding:0 4px;border-radius:5px;margin-right:3px}
+  .sg-o{color:var(--green);background:#dcebd9} .sg-m{color:var(--rust);background:#f1e3cd} .sg-p{color:var(--red);background:#f3dcd5}
+  /* 速览总表 */
+  .ovwrap{border:1px solid var(--line);border-radius:14px;background:var(--paper);margin:4px 0 26px;overflow:hidden}
+  .ovhead{display:flex;align-items:center;gap:10px;padding:12px 18px;cursor:pointer;user-select:none;background:linear-gradient(180deg,#fbf7ee,#f5eede);border-bottom:1px solid var(--line)}
+  .ovhead .ovt{font-weight:700;font-size:14px;color:var(--ink)}
+  .ovhead .ovsub{font-size:11.5px;color:var(--mute)}
+  .ovhead .ovtog{margin-left:auto;font-size:12.5px;color:var(--gold);font-weight:700}
+  .ovbody{overflow:auto;max-height:560px}
+  .ovbody.collapsed{display:none}
+  table.ovt2{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.ovt2 th{position:sticky;top:0;z-index:1;background:#f1e9d6;color:var(--mute);font-weight:600;text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;font-size:11.5px}
+  table.ovt2 th:hover{color:var(--gold)}
+  table.ovt2 td{padding:8px 10px;border-bottom:1px solid #efe9db;vertical-align:middle;color:var(--ink2)}
+  table.ovt2 tbody tr{cursor:pointer}
+  table.ovt2 tbody tr:hover td{background:#faf5e9}
+  .ovname{font-weight:700;color:var(--ink);white-space:nowrap}
+  .ovlv{font-weight:700;color:var(--gold)}
+  .ovlvn{color:var(--mute);font-size:11px}
+  .ovlvcell{white-space:nowrap}
+  .ovk{font-size:10.5px;padding:1px 7px;border-radius:9px;white-space:nowrap;border:1px solid transparent}
+  .ovcap{color:var(--ink2);min-width:220px}
+  .ovml{font-size:10px;font-weight:700;padding:1px 6px;border-radius:7px;border:1px solid;margin-right:2px;white-space:nowrap}
+  .ovexp{color:var(--green);text-decoration:none;font-weight:700;white-space:nowrap}
+  .ovexp.dead{color:#c2bbac}
+  footer{padding:30px 0 60px;color:var(--mute);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<nav><div class="in">
+  <span class="brand">丽兹行 · <i>豪宅研究院</i></span>
+  <span class="sp"></span>
+  <a href="#why">为什么</a><a href="#concept">概念</a><a href="#conclusion">结论</a><a href="#atlas-sec">公司图鉴</a>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="kick">External Input · 战略外部输入</div>
+    <h1 class="serif">AI 时代的外部输入<br>同业到底怎么用 AI</h1>
+    <div class="hr-gold"></div>
+    <p class="lead">这不是一份技术清单，而是丽兹行 AI 战略转型的一面外部镜子——看全球同业与相邻高端服务业把 AI 用到哪一层、为什么、哪些环节交给 AI、哪些必须留给人。</p>
+    <div class="meta"><span>📡 全量刷新至 <b>2026-06-12</b>（每卡双日期：核实 / 最新动态）</span><span>样本 <b id="cnt"></b> 家</span><span>来源标 官／媒／推 · 分析为我方视角</span></div>
+  </header>
+
+  <!-- ① 为什么 -->
+  <section id="why">
+    <div class="sechead"><span class="secno serif">壹</span><h2 class="serif">为什么做这份调研</h2></div>
+    <div class="grid2">
+      <div class="panel"><div class="lbl">定位</div>
+        <p class="prose">丽兹行正在做 AI 时代的战略转型，而战略不能闭门造车。内部有市场洞察与豪宅研究院告诉我们「客户与市场」；这份图谱负责另一半——<b>同业和相邻高端服务业到底怎么用 AI</b>。两者合起来，才能定转型方向、识别威胁与机会、给团队开脑。</p>
+      </div>
+      <div class="panel"><div class="lbl">它回答的问题</div>
+        <ul class="tick">
+          <li>AI 把行业重塑成什么样，哪些环节<b>取代人</b>、哪些<b>必须留人</b>？</li>
+          <li>直接竞品的 AI 进度，我们落后还是领先？</li>
+          <li>什么样的 AI 玩家会从哪个缺口切进来？</li>
+          <li>我们该<b>自建 / 采购 / 合作</b>哪几个 AI 能力？</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 概念框架 -->
+  <section id="concept">
+    <div class="sechead"><span class="secno serif">贰</span><h2 class="serif">读这份图谱前，先对齐几个概念</h2></div>
+    <div class="grid2" style="margin-bottom:18px">
+      <div class="panel"><div class="lbl">+AI vs AI Native</div>
+        <p class="prose"><b>+AI（巨头加装）</b>＝在原有生意上加装 AI，提效为主，拿掉 AI 生意照样在。<br><b>AI Native（原生）</b>＝因为有 AI 才有这门生意，拿掉 AI 就塌。<br>但这只是标签——真正要看的是「<b>用到多深</b>」，所以我们给每家评级。</p>
+      </div>
+      <div class="panel"><div class="lbl">为什么要给 AI 用法评级</div>
+        <p class="prose">「在用 AI」已经是句废话——人人都在用。真正该问的是「用到哪一层、深到什么程度」。评级把它变成可比较的坐标：① 25 家横向可比；② 让我们能<b>给自己定位</b>，差几步看得见；③ 最关键，它暴露每家的<b>天花板原因</b>——停在某级是能力不够，还是<b>故意不做</b>（战略选择）。</p>
+      </div>
+    </div>
+    <div class="panel" style="margin-bottom:18px"><div class="lbl">AI 使用水平 · 四个维度（综合成下方一个档位）</div>
+      <div class="grid2">
+        <div>
+          <div class="dimrow"><span class="dn">① 自主度</span><span class="dd">答疑 → 提效工具 → Agent 代理 → 限定域自驾</span></div>
+          <div class="dimrow"><span class="dn">② 渗透广度</span><span class="dd">单点功能 → 几段价值链 → 全价值链 → 重构业务</span></div>
+        </div>
+        <div>
+          <div class="dimrow"><span class="dn">③ 自研深度</span><span class="dd">用现成 → 深度集成 → 自研模型/Agent → 产品化外卖</span></div>
+          <div class="dimrow"><span class="dn">④ 数据壁垒</span><span class="dd">装点不可靠 → 可控可靠 → 专有数据飞轮</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="margin-bottom:18px"><div class="lbl">四维综合成一个档位 · L0–L7（不封顶，留出前瞻）</div>
+      <div class="ladder">
+        <div class="lvrow"><span class="lpill">L1</span><b>单点提效</b><span class="d">现成 AI 把单任务做更快，人走每步（生成式·浅）</span></div>
+        <div class="lvrow"><span class="lpill">L2</span><b>体系副驾</b><span class="d">成体系辅助、跨多环节，人主导不碰关系成交（生成式·嵌工作流）</span></div>
+        <div class="lvrow"><span class="lpill">L3</span><b>流程代理</b><span class="d">AI 主动跑多步、自动完成某些环节，人管目标与异常（代理 AI·起步）</span></div>
+        <div class="lvrow"><span class="lpill">L4</span><b>域内自驾</b><span class="d">限定域端到端无人、人效解耦（代理 AI·成熟）</span></div>
+        <div class="lvrow"><span class="lpill">L5</span><b>模式重构</b><span class="d">AI 重构商业模式/组织，逼近 OpenAI「组织级」</span></div>
+        <div class="lvrow future"><span class="lpill">L6</span><b>🔮 AI 自主经营</b><span class="d">多 Agent 自主跑完整业务闭环，人退到治理判断 ＝ OpenAI「Organizations」· 目前无人到达</span></div>
+        <div class="lvrow future"><span class="lpill">L7</span><b>🔮 物理/具身 AI</b><span class="d">具身机器人带看、实体数字人、现场交付勘验 ＝ 英伟达「Physical AI」· 纯未来</span></div>
+      </div>
+      <div class="laddersrc">尺子对齐两套权威分级：OpenAI 五级（…Innovators → <b>Organizations</b>）与英伟达四浪（…Agentic → <b>Physical AI</b>）。来源：<a href="https://www.forbes.com/sites/jodiecook/2024/07/16/openais-5-levels-of-super-ai-agi-to-outperform-human-capability/" target="_blank">OpenAI 5 Levels</a> · <a href="https://blogs.nvidia.com/blog/ces-2025-jensen-huang/" target="_blank">NVIDIA CES 2025</a></div>
+    </div>
+    <div class="grid2">
+      <div class="panel"><div class="lbl">行业价值链 · 我们在哪</div>
+        <div class="vchain">
+          <span class="vstage">开发/建造</span><span class="a">›</span>
+          <span class="vstage">营销/获客</span><span class="a">›</span>
+          <span class="vstage us">交易/经纪<br><small>丽兹行在此</small></span><span class="a">›</span>
+          <span class="vstage">金融/法律</span><span class="a">›</span>
+          <span class="vstage">持有/资管</span>
+        </div>
+        <p class="prose" style="font-size:12.5px;margin-top:6px;color:var(--mute)">每张卡先在这条大链上定位，再放大到该环节的子链——绿点=AI 所在、金点=必须留人。</p>
+      </div>
+      <div class="panel"><div class="lbl">四类对标 + 怎么选出来的</div>
+        <ul class="tick">
+          <li>🎯 <b>竞品</b>＝像不像我们 · 🏆 <b>样板</b>＝能不能偷战术 · ⚠️ <b>威胁</b>＝会不会替代经纪 · 🔭 <b>类比</b>＝结构同不同构</li>
+          <li>范围＝凡能教我们「<b>高价值·重信任·跨境</b>的交易/顾问生意怎么用 AI」的都收，不限房产交易</li>
+          <li>竞品相似度＝跨境 × 豪宅 × 中介 × 中国买家</li>
+          <li>硬门槛：有可迁移的一课 · 能亲手体验 · 动作一年内；竞品「没动 AI」也是情报</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ 结论 -->
+  <section id="conclusion">
+    <div class="sechead"><span class="secno serif">叁</span><h2 class="serif">结论先行</h2><span class="sub">从 26 家提炼的七条客观规律</span></div>
+    <div class="chain">
+      <div class="step"><span class="n serif"></span><p><b>AI 普遍被放在后台与中台，前台的客户关系仍由人把守。</b>这是高信任玩家近乎一致的选择：AI 负责研究、营销、文书、客户档案与流程，而客户关系、专业建议与谈判仍留给人。苏富比、莱坊一边自研 GPT 与 Agentic 研究，一边公开重申「买卖永远需要人的温度」；大摩、瑞银把生成式 AI 全部塞进投顾后台，明确不让它碰投资建议与客户关系。它们不是不会用 AI，而是有意识地划了一条「AI 进后台、人守前台」的界。</p></div>
+      <div class="step"><span class="n serif"></span><p><b>AI 的使用深度，由赛道的「信任浓度」决定，而不是公司大小或技术力。</b>同一类 AI 技术，在不同赛道被部署到完全不同的深度。信任要求低、流程标准化的环节——长租运营（EliseAI 做到限定域自驾）、大众买卖（NoBroker、Propseller 把 AI 推到模式重构、甚至去掉中介）——AI 被允许端到端接管；而信任要求高、非标、低频的环节——豪宅、跨境、超高净值的艺术与财富——几乎无一例外把 AI 留在辅助位。AI 能走到哪一步，主要由赛道的信任结构决定，而非某家公司 AI 强弱。</p></div>
+      <div class="step"><span class="n serif"></span><p><b>「执行类」能力正在被快速商品化，且价格在下行。</b>过去依赖规模或专业门槛的执行环节，如今多已成为廉价的标准化工具：找房发现（Zillow AI Mode）、估值（HouseCanary 月费约 19 美元）、虚拟 staging（Collov）、尽调报告（Sprift）、首轮接待与问答（EliseAI、HeyLeo）。这些能力越来越像水电——人人可取、且越来越便宜。差异化正从「会不会做这些」转向「做完之后还剩什么」。</p></div>
+      <div class="step"><span class="n serif"></span><p><b>真正的壁垒普遍来自专有数据与网络，AI 是放大器而非壁垒本身。</b>在这批公司里，可持续的优势几乎都不是 AI 功能本身，而是 AI 之下的资产：居外的中国买家数据、贝壳的真房源库、苏富比的私盘与品牌、Square Yards 把自有数据平台对外产品化。AI 放大了这些资产的价值，但功能本身可被复制；只购买现成 AI 工具、没有独家数据沉淀的公司（如 The Agency），停留在最浅的使用层级。</p></div>
+      <div class="step"><span class="n serif"></span><p><b>进入 2026，出现两个新动向：AI 触发并购整合，以及买家侧对话 AI 成为新入口。</b>其一，AI 平台的高固定成本推动整合——半年内三桩大并购：Compass 并 Anywhere、Real 并 RE/MAX（一个 Leo 服务 18 万经纪）、CoStar 并 Matterport，规模成为承担与摊薄 AI 投入的方式。其二，头部平台几乎同时上线面向买家的对话式 AI 前门——HeyLeo、Zillow AI Mode、Compass One——买家与房产的第一次接触，正从「先找经纪」转向「先问 AI」。</p></div>
+      <div class="step"><span class="n serif"></span><p><b>私人财富管理给「人即产品」的生意提供了最成熟的模板。</b>与豪宅经纪结构最像的高信任生意是私人银行——同样「人即产品、关系即资产」。大摩与瑞银两家顶级机构独立收敛到几乎相同的打法：把 AI 做成投顾副驾（大摩 Debrief 自动生成会议纪要并写回 CRM、98% 顾问团队在用；瑞银 Red 全员铺开、STAAT 自动出会前简报，每次客户会省 3–4 小时），让顾问把省下的时间还给客户关系。这套「AI 武装人、人守关系」的模式，已被规模化验证。</p></div>
+      <div class="step"><span class="n serif"></span><p><b>几乎无人向买家直接为 AI 收费；AI 的商业价值要么是压低成本，要么是提升转化。</b>26 家里没有一家把 AI 当作向终端买家收费的独立产品。AI 的变现只有两条路：一是压低成本以支撑更低的价格（Propseller 把人效拉高、佣金压到 1%，NoBroker 用订阅替代佣金）；二是作为增效工具免费提供给经纪、以提高留存与转化（Compass、贝壳、Rechat）。在这门生意里，AI 改变的是成本结构与转化效率，而不是直接创造一个新的收费项。</p></div>
+    </div>
+    <div class="kicker">把这七条放在一起看，外部环境对一门<b>高信任、跨境、低频</b>的豪宅生意给出的信号相当一致：AI 会把执行层快速拉平，把竞争重心推向<b>数据、关系与判断</b>；高信任赛道短期内仍会把 AI 留在辅助位，但<b>买家侧的 AI 入口正在改变「第一次接触」的发生方式</b>。这些规律本身不替丽兹行下结论，但划出了思考的边界——下面的战略矩阵与三年措施，是把它们落到我们自己坐标的一次尝试。</div>
+
+    <h3 class="serif" style="margin:34px 0 12px;font-size:17px">战略矩阵：AI 水平（横轴 L1→L7）× 替代还是增强经纪（纵轴）</h3>
+    <div class="matrix" id="matrix">
+      <div class="mid"></div><div class="vl" style="left:51%"></div>
+      <div class="yt">↑ 替代经纪（威胁）</div><div class="yb">↓ 增强经纪（机会）</div>
+      <div class="quad" style="top:9px;right:14px;color:var(--red)">危险区 · 高 AI ＋ 替代</div>
+      <div class="quad" style="bottom:24px;right:14px;color:var(--green)">学习区 · 高 AI ＋ 增强</div>
+      <div class="ax"><span>L1 提效</span><span>L2 副驾</span><span>L3 代理</span><span>L4 自驾</span><span>L5 重构</span><span>L6🔮</span><span>L7🔮</span></div>
+    </div>
+    <p class="prose" style="font-size:12px;color:var(--mute);margin-top:24px">🟡 金色＝<b>丽兹行（我们·现状 ≈ L1）</b>，在左下角。<b>右上「危险区」</b>＝该防的替代型威胁（NoBroker / Propseller / EliseAI）；<b>右下「学习区」</b>＝该偷的高水平增强样板（Compass / 贝壳 / Rechat）。点任意公司名可跳到它的卡片。</p>
+
+    <h3 class="serif" style="margin:36px 0 4px;font-size:17px">落到 3 年措施（对齐 v3.0 四主线 · 前/中/后台 · 严守收入 3%）</h3>
+    <p class="prose" style="color:var(--mute);font-size:13px;margin:0 0 14px">定调：AI 是放大器、赋能现有主业（卖方→买方），三年以重组现有 2000 万数字化盘为主、增量逐步加。</p>
+    <div class="mez">
+      <div class="panel"><h3><span class="tagdot" style="background:var(--green)"></span>前线 · 顾问×客户/业主</h3>
+        <ul class="tick">
+          <li>顾问 35 判断模块 Skill 化 + 会议→纪要→CRM→跟进，人效目标 +20%</li>
+          <li>业主侧 AI（主线 D）：科学定价 / AI 营销·3D 看房 / 业主周报·小程序</li>
+          <li>C 类客户 AI 分身触达，筛高意向转人工</li>
+        </ul>
+        <div class="bench">对标：Rechat·Lucy / 大摩 Debrief / Collov / Matterport·如视</div>
+      </div>
+      <div class="panel"><h3><span class="tagdot" style="background:var(--gold)"></span>中台 · 数据/知识平台</h3>
+        <ul class="tick">
+          <li>零号工程：双边客户唯一 ID + 8 年沟通记录激活 → 公司级数据库</li>
+          <li>豪宅研究院 9 国 22 城 + 成交档案 → 自有数据飞轮（别人买不到）</li>
+          <li>这是真正的护城河，也是 6/4 你们自己点名最缺的一环</li>
+        </ul>
+        <div class="bench">对标：Juwai 买家数据 / 贝壳房源 / Square Yards 数据平台</div>
+      </div>
+      <div class="panel"><h3><span class="tagdot" style="background:var(--blue)"></span>后台 · 中后台赋能/经营</h3>
+        <ul class="tick">
+          <li>研究院认知中枢 + 秒查内部研究、Agentic 研究自动化</li>
+          <li>会议数据对齐，经营诊断 AI 化</li>
+          <li>把「各用各的 GPT」收进公司统一工作流</li>
+        </ul>
+        <div class="bench">对标：大摩 Assistant / Knight Frank Agentic / UBS Red</div>
+      </div>
+    </div>
+    <p class="prose" style="margin-top:14px"><b>关于「占控制点」：</b>真正要占的不是「买方 AI 入口 App」（那违背私人银行/关系模式与 3% 预算），而是<b>「高净值家庭终身不动产关系」</b>——用 AI 双边档案 + 顾问关系把客户锁进 5–10 年陪伴，让任何买方 AI 助手都绕不开「最懂这个家庭、又信得过的那个人」。<b>控制点 = 关系，不是工具。</b></p>
+
+    <div class="panel" style="margin-top:20px;background:#fbf8f0"><div class="lbl">投钱的边界（避免为花活买单）</div>
+      <p class="prose">很多 AI 功能 demo 时惊艳，真用起来不稳定——会胡编、得有人盯。所以钱别砸在「看着酷但靠不住」的花活上，砸两类地方：① <b>有标准答案、AI 能稳定干的</b>（定价、尽调、纪要）；② <b>越用越攒专有数据的</b>。这跟 3% 硬约束是一回事——好钢用在刀刃上。</p>
+    </div>
+    <h3 class="serif" style="margin:30px 0 10px;font-size:15px">这份图谱最终要回答</h3>
+    <div class="q4">
+      <div class="qi"><b>Q1</b> AI 商品化我们哪几段、加固哪几段？</div>
+      <div class="qi"><b>Q2</b> 竞品 AI 进度，我们落后几个身位？</div>
+      <div class="qi"><b>Q3</b> 18 个月内谁会从哪个缺口切进来？</div>
+      <div class="qi"><b>Q4</b> 该自建/采购/合作哪 3-5 个能力？</div>
+    </div>
+  </section>
+
+  <!-- ④ 图鉴 -->
+  <section id="atlas-sec" style="border-bottom:none">
+    <div class="sechead"><span class="secno serif">肆</span><h2 class="serif">公司图鉴</h2><span class="sub" id="atlassub"></span></div>
+    <div class="ovwrap">
+      <div class="ovhead" onclick="ovToggle()"><span class="ovt">📋 速览总表</span><span class="ovsub">26 家一屏 · 点表头排序 · 点行跳到卡片</span><span class="ovtog" id="ovtogtxt">▾ 收起</span></div>
+      <div id="overview" class="ovbody"><table class="ovt2"><thead><tr><th onclick="ovSortBy('name')">公司</th><th onclick="ovSortBy('k')">类型</th><th onclick="ovSortBy('lv')">档位 ▾</th><th>原生</th><th>价值链位置</th><th>主线</th><th>AI 打法（一句）</th><th>体验</th></tr></thead><tbody id="ovtbody"></tbody></table></div>
+    </div>
+    <div class="filters">
+      <div class="fgroup"><span class="gl">优先级</span>
+        <button class="fbtn tier on" data-g="tier" data-v="all" onclick="setF(this)">全部</button>
+        <button class="fbtn tier" data-g="tier" data-v="必看" onclick="setF(this)">⭐ 必看</button>
+        <button class="fbtn tier" data-g="tier" data-v="推荐" onclick="setF(this)">推荐看</button>
+        <button class="fbtn tier" data-g="tier" data-v="选看" onclick="setF(this)">选看</button>
+      </div>
+      <div class="fgroup"><span class="gl">类型</span>
+        <button class="fbtn on" data-g="type" data-v="all" onclick="setF(this)">全部</button>
+        <button class="fbtn" data-g="type" data-v="竞品" onclick="setF(this)">🎯 直接竞品</button>
+        <button class="fbtn" data-g="type" data-v="样板" onclick="setF(this)">🏆 领先样板</button>
+        <button class="fbtn" data-g="type" data-v="威胁" onclick="setF(this)">⚠️ 威胁原型</button>
+        <button class="fbtn" data-g="type" data-v="类比" onclick="setF(this)">🔭 跨界类比</button>
+      </div>
+      <div class="fgroup"><span class="gl">搜索</span>
+        <input id="search" class="searchbox" placeholder="输入公司名，如 Compass / 苏富比 / NoBroker…" oninput="F.q=this.value;render()">
+      </div>
+    </div>
+    <div id="atlas"></div>
+  </section>
+  <footer>丽兹行 · 豪宅研究院　|　AI 时代的外部输入　|　数据截至 2026-06，可编辑、可扩充</footer>
+</div>
+
+<script>
+const MACRO=["开发/建造","营销/获客","交易/经纪","金融/法律","持有/资管"];
+const SEG2=["获客/线索","房源匹配","带看","谈判","签约/过户","售后"];
+const SEG3=["数据聚合","估值/分析","风险/合规","文件/流程","决策建议"];
+const SEG4=["招租/获客","运营/客服","催缴/续约","维护","资产优化"];
+const DIMN=["自主","渗透","自研","数据"];
+const LVL=["装点","单点提效","体系副驾","流程代理","域内自驾","模式重构","AI 自主经营","物理/具身 AI"];
+const LVMAP={"Juwai IQI":3,"Sotheby's Int'l Realty":2,"Knight Frank":3,"有路 Uoolu":2,"Douglas Elliman":2,"JamesEdition":2,"The Agency":1,"Betterhomes（迪拜）":1,"Compass":3,"The Real Brokerage（Leo）":3,"贝壳 / 如视 Realsee":3,"Rechat（Lucy）":3,"HouseCanary":2,"EliseAI":4,"Square Yards":3,"Sprift":2,"Propseller":5,"Matterport":2,"Zillow":2,"Collov AI":2,"NoBroker":5,"AI @ Morgan Stanley":2,"AI @ UBS（UBS Red）":2,"Christie's":2,"Artsy":2,"Ten Lifestyle（Talia）":3};
+function lvOf(d){const o=localStorage.getItem("lv:"+d.name);return o!==null?Number(o):(LVMAP[d.name]??1)}
+function lvTag(d,i){const lv=lvOf(d);return `<span class="lvtag ${lv>=6?'f':''}" id="lv${i}" onclick="cycleLv(${i})" title="点击切换档位（可改·存本地）">L${lv} · ${LVL[lv]}</span>`}
+const ML={A:{t:"A·双边客户",c:"ml-a"},B:{t:"B·顾问判断",c:"ml-b"},C:{t:"C·数据基建",c:"ml-c"},D:{t:"D·业主侧",c:"ml-d"}};
+const CRED={"官":{t:"官方披露",c:"cr-o"},"媒":{t:"媒体报道",c:"cr-m"},"推":{t:"含推测",c:"cr-p"}};
+const SG={"官":"sg-o","媒":"sg-m","推":"sg-p"};
+function credTag(d){return d.cred&&CRED[d.cred]?`<span class="cred ${CRED[d.cred].c}">${CRED[d.cred].t}</span>`:""}
+function aiVal(d){if(!d.tl)return `${d.ai}${credTag(d)}`;const lv=lvOf(d);return `<div class="aihead">▸ AI 用法演变${credTag(d)}</div><div class="tl">`+d.tl.map((t,j)=>{const now=j===d.tl.length-1;return `<div class="ti ${now?'now':''}"><span class="tph">${t[0]}</span><span class="tdate">${t[1]}</span>${now?`<span class="tlv">→ 当前 L${lv}·${LVL[lv]}</span>`:''}<div class="tdesc">${t[2]}</div></div>`}).join("")+`</div>`}
+function mlChips(d){return d.ml&&d.ml.length?`<div class="mls"><span class="mlhint">对应主线</span>`+d.ml.map(m=>ML[m]?`<span class="ml ${ML[m].c}">${ML[m].t}</span>`:"").join("")+`</div>`:""}
+function srcLine(d){return d.src.map(s=>`${s[2]&&SG[s[2]]?`<span class="sg ${SG[s[2]]}">${s[2]}</span>`:""}<a href="${s[1]}" target="_blank">${s[0]}</a>`).join(" · ")}
+function cycleLv(i){const d=DATA[i];const lv=(lvOf(d)+1)%8;localStorage.setItem("lv:"+d.name,lv);const el=document.getElementById("lv"+i);if(el){el.textContent="L"+lv+" · "+LVL[lv];el.classList.toggle("f",lv>=6)}if(typeof buildOverview==="function")buildOverview()}
+function ovStage(d){return (d.macroOn||[]).map(x=>MACRO[x]).join("·")||"—"}
+let ovSort={key:"lv",dir:-1};
+function ovSortBy(key){if(ovSort.key===key)ovSort.dir*=-1;else ovSort={key:key,dir:(key==="name"||key==="k")?1:-1};buildOverview()}
+function ovToggle(){const o=document.getElementById("overview");o.classList.toggle("collapsed");const t=document.getElementById("ovtogtxt");if(t)t.textContent=o.classList.contains("collapsed")?"▸ 展开":"▾ 收起"}
+function buildOverview(){const tb=document.getElementById("ovtbody");if(!tb)return;const rows=DATA.map((d,i)=>({d:d,i:i,lv:lvOf(d)}));const k=ovSort.key,dir=ovSort.dir;rows.sort((a,b)=>{if(k==="name")return dir*(a.d.short||a.d.name).localeCompare(b.d.short||b.d.name,"zh");if(k==="k")return dir*a.d.k.localeCompare(b.d.k,"zh");return dir*(a.lv-b.lv)});tb.innerHTML=rows.map(o=>{const d=o.d,i=o.i,lv=o.lv;return `<tr onclick="jumpTo(${i})"><td><span class="ovname">${d.short||d.name}</span></td><td><span class="ovk ${d.type.c}">${d.k}</span></td><td class="ovlvcell"><span class="ovlv">L${lv}</span> <span class="ovlvn">${LVL[lv]}</span></td><td>${d.native.t}</td><td>${ovStage(d)}</td><td>${(d.ml||[]).map(m=>ML[m]?`<span class="ovml ${ML[m].c}">${m}</span>`:"").join("")}</td><td class="ovcap">${d.lvcap}</td><td>${(d.exp&&!d.exp.dead&&d.exp.url)?`<a class="ovexp" href="${d.exp.url}" target="_blank" onclick="event.stopPropagation()">▶ 试</a>`:`<span class="ovexp dead">—</span>`}</td></tr>`}).join("")}
+
+const DATA=[
+{k:"竞品",tier:"必看",name:"Juwai IQI",short:"Juwai",cn:"居外 IQI · 马来西亚/香港/上海（跨境）",site:"https://juwaiiqi.com/",type:{t:"🎯 直接竞品",c:"c-red"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026-05",dims:[2,3,2,4],lvcap:"已成体系的经纪提效（ATLAS/AtlasGPT/IQPilot），成交仍靠人",ml:["B","C"],cred:"官",tl:[["起步·跨境门户","2019","居外网×IQI 合并，先用多语种翻译、咨询机器人、线索评分接住跨境沟通"],["Atlas 平台","2023","上线经纪超级 App「IQI Atlas」+ AtlasGPT 一键写房源文案，AI 进经纪日常工作流"],["体系化","2026·05","2026 大会主推 Atlas 生态：内嵌 Aini（AI 教练）、IQPilot（7×24 自动跟进/招募），全套武装经纪——成交仍靠人"]],
+ who:"亚洲规模领先的跨境房产集团，由海外房产门户「居外网」与经纪网络 IQI 合并而来，经纪人覆盖二十多国。主营是把华人买家和全球房源对接撮合。",serve:"服务想在海外置业的华人及亚洲高净值家庭；典型购房动机是子女教育、资产配置和移民身份。",edge:"手握十多年积累的独家中国买家需求数据，加上数万人规模的本地经纪网络。",need:"跨境买房三大痛点是语言不通、信息不对称、不知道该信谁——它用「门户 + 经纪」把这三件事一并接住。",ai:"到 2026 年 AI 已成体系：经纪操作系统 IQI ATLAS 内嵌 AtlasGPT、AI Marketing、AI Inventory，再加 Aini（AI 教练+内容规划）与 IQPilot（自动跟进、7×24 招募沟通）；早期的多语种翻译、咨询机器人、线索评分仍在用。本质仍是「武装经纪人的提效」。",fee:"B2B2C：开发商和经纪为线索、广告、成交佣金付费，购房者免费。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1],microMoat:[3,4],takeaway:"它最硬的护城河其实不是 AI，而是那份独家买家数据和经纪网络，AI 只是放大器。提醒我们：先确认有没有别人拿不走的独家数据或客户资产，再谈 AI。",exp:{label:"juwai.com 找房（C 端门户）",url:"https://www.juwai.com",dead:false},mx:30,my:72,src:[["IQI Atlas & AI 工具 FAQ·官方","https://iqiglobal.com/blog/iqi-atlas-ai-tools-faq/","官"],["2026 大会·Atlas 生态","https://iqiglobal.com/blog/juwai-iqi-convention-festival-2026/","官"],["IQPilot","https://www.linkedin.com/posts/nabeel-mungaye-9ab05119_juwaiiqi-iqpilot-technology-activity-7359129527924518912-ZSVC","媒"]]},
+
+{k:"竞品",tier:"必看",name:"Sotheby's Int'l Realty",short:"苏富比",cn:"苏富比国际地产 · 全球豪宅网络",site:"https://www.sothebysrealty.com/",type:{t:"🎯 直接竞品",c:"c-red"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2025-12",dims:[2,1,2,2],lvcap:"故意守住人的温度，AI 只碰营销",ml:["B","D"],cred:"官",tl:[["按兵不动","2023","豪宅圈对 AI 克制：先观望，强调买卖永远需要人的温度"],["自研 GPT","2025","Premier Sotheby's 自研 PremierGPT（建于 OpenAI）拿下 2025 Inman「最佳营销 AI」奖：秒出品牌一致的房源文案/社媒/广告/买家画像；ONE Sotheby's 也上 AI 平台"],["顾问优先·守温度","2026","计划把 AI 进一步嵌入各运营平台、官网上线开放式自然语言搜索——但反复强调 AI 只碰营销后台，关系与谈判留人"]],
+ who:"全球顶级豪宅住宅经纪网络，以加盟形式覆盖数十国，把奢侈品牌调性与全球私盘网络做成核心资产。",serve:"服务高净值与超高净值买家卖家；他们要的是品味匹配、隐私，和「在哪都能找到对的房、对的人」。",edge:"百年奢侈品牌信任背书 + 全球顶级私盘与经纪网络。",need:"高端客群最怕「找不到够格的房、遇不到懂自己的人」——它用品牌和网络解决信任与稀缺资源问题。",ai:"豪宅圈并非不碰 AI，但很克制：旗下 Premier Sotheby's 自研 PremierGPT 拿下 2025 Inman「最佳营销 AI」奖，主打顾问优先、品牌一致的营销内容生成；ONE Sotheby's 也做了 AI 平台。但官方反复强调：买卖永远需要人的温度。",fee:"加盟费 + 成交佣金分成；AI 工具自用、不对外。",
+ macroOn:[1],macroMoat:[2],microTitle:"放大「交易/经纪」环节（AI 只敢碰前端）",micro:SEG2,microOn:[0],microMoat:[3,4],takeaway:"最直接的对标信号：连豪宅龙头都在自研 GPT 做营销，却死守人的温度不让 AI 碰客户关系与谈判。印证我们的判断——AI 进后台、人守前台，「自己该有 AI」是正在发生的标配。",exp:{label:"PremierGPT 内部工具·不可直接试",url:"",dead:true},mx:16,my:80,src:[["PremierGPT 获 2025 Inman AI 奖·官方稿","https://www.citybiz.co/article/765402/premier-sothebys-international-realty-wins-2025-inman-ai-award-for-proprietary-platform-premiergpt/","官"],["PremierGPT 获奖详情","https://realtytimes.com/consumeradvice/announcements/premier-sotheby-s-international-realty-wins-2025-inman-ai-award-for-proprietary-platform-premiergpt","媒"],["ONE Sotheby's AI","https://onesir.app/","官"]]},
+
+{k:"竞品",tier:"必看",name:"Knight Frank",short:"Knight Frank",cn:"莱坊 · 全球高端房产顾问",site:"https://www.knightfrank.com/",type:{t:"🎯 直接竞品",c:"c-red"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026-03",dims:[3,2,2,3],lvcap:"已上 Agentic AI 跑多步研究，建议仍靠人",ml:["B","C"],cred:"官",tl:[["研究品牌","2023","以《财富报告》等数据研究著称；先用生成式 AI 做内部情报与内容提效"],["Agentic 化","2025","公开发布《AI 在企业不动产》研究，内部用 Agentic AI（自主跑多步任务）改造情报工作流"],["研究提速","2026·03","Agentic AI 把混合用途项目尽调从「一周+」压到约 90 分钟 + 20 分钟人工复核，季度可投标 15 个 vs 原来 3 个——建议仍由人定"]],
+ who:"全球领先的高端房地产顾问公司，住宅与商业并重，以数据驱动的研究（《财富报告》）和跨境投资咨询著称。",serve:"服务高净值个人与机构投资者；客户要「看懂全球市场、做对资产决策」——和我们的研究院最像。",edge:"几十年沉淀的全球市场数据与研究品牌、跨境投资咨询能力。",need:"高端客群面对全球市场信息过载、政策复杂，需要可信的研究与判断来降低决策风险。",ai:"AI 重心在智能化研究与咨询情报：公开发布《AI 在企业不动产中的应用》等研究，并在内部用生成式 AI 与 Agentic AI（能自主跑多步任务的智能体）改造情报工作流。它也公开表态——AI 永远无法取代人的温度。",fee:"顾问服务费 + 交易佣金；研究内容部分公开引流。",
+ macroOn:[1,3],macroMoat:[2],microTitle:"放大「金融/法律（研究·尽调）」子链",micro:SEG3,microOn:[0,1],microMoat:[4],takeaway:"和我们研究院最像的对标：它把 AI 用在市场研究与咨询情报的自动化，甚至上了 Agentic AI。豪宅研究院若用 AI 把全球研究、政策追踪、客户专属报告自动化，既放大产能又强化「研究驱动」品牌。",exp:{label:"读 AI 辅助研究（公开）",url:"https://www.knightfrank.com/research",dead:false},mx:55,my:74,src:[["KF 研究·AI 在企业不动产","https://www.knightfrank.com/research/article/2025/3/ai-in-corporate-real-estate-adoption-gains-momentum","官"],["KF 研究·市场为 AI 风险重定价","https://www.knightfrank.co.uk/research/article/2026/2/markets-reprice-ai-risk--real-estate-included","官"],["Agentic AI 把尽调压到 90 分钟","https://commercialobserver.com/2026/05/agentic-ai-commercial-real-estate-advantages/","媒"]]},
+
+{k:"竞品",tier:"推荐",name:"有路 Uoolu",short:"有路",cn:"有路网 · 中国（跨境海外置业）",site:"https://www.uoolu.com/",type:{t:"🎯 直接竞品",c:"c-red"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2025",dims:[2,2,2,3],lvcap:"信息匹配+资管为主，成交靠顾问",ml:["B","A"],cred:"媒",tl:[["跨境门户","2015","创立海外房产 O2O 平台，破解「代理魔咒」，覆盖 50 国 150 城"],["科技链全球","2021","主打「科技链接全球地产」：VR 看房、智能匹配推荐、海外开户/按揭辅助"],["AI 辅助投资","2025","AI 用于海外房源智能匹配、数据与内容呈现、辅助投资决策——仍是「平台＋顾问」，AI 偏提效"]],
+ who:"2015 年创立的中国跨境房产互联网平台，覆盖全球 40 多国、125 城、超百万套房源，主打海外不动产投资与资产配置。",serve:"服务想做海外资产配置的中国投资型买家；月活三百万级，动机偏投资回报与资产避险。",edge:"庞大的中国跨境投资客流量 + 千余家海外开发商资源 + 资管服务链。",need:"中国人海外投资房产最缺「靠谱信息 + 投资判断 + 买后资管」——它把这条链打包。",ai:"AI 主要用于海外房源的智能匹配与推荐、数据与内容呈现，辅助投资决策；整体仍是「平台 + 顾问」模式，AI 偏提效。",fee:"向开发商收推广/导流费 + 成交分成，延伸资管增值服务。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1],microMoat:[3,4],takeaway:"国内最直接的同类——同样做中国人海外置业，且把「投资属性 + 资管」做重。提醒：跨境买家要的是「配置—持有—退出」的全程判断，AI 在投资分析端最有发挥。",exp:{label:"uoolu.com 找房（C 端）",url:"https://www.uoolu.com/",dead:false},mx:32,my:70,src:[["有路网·关于我们","https://www.uoolu.com/index/about/","官"],["有路·破解代理魔咒（猎云网）","https://www.lieyunwang.com/archives/70174","媒"],["36氪 项目信息","https://pitchhub.36kr.com/project/1678500239258625","媒"]]},
+
+{k:"竞品",tier:"推荐",name:"Douglas Elliman",short:"Elliman",cn:"美国顶级豪宅住宅经纪（NYSE: DOUG）",site:"https://www.elliman.com/",type:{t:"🎯 直接竞品",c:"c-red"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026",dims:[2,2,2,2],lvcap:"Elli AI 武装经纪，2026 全美铺开",ml:["B","A"],cred:"官",tl:[["传统豪宅龙头","2023","顶级豪宅经纪（NYSE: DOUG）＋ Knight Frank 全球联盟，主攻高端住宅"],["Elli AI 上线","2025·10","推出 Elli AI——给经纪的白标 AI 助手 App：自然语言搜 MLS、秒出品牌报告，先佛州"],["全美铺开","2026","Elli 向全美 6600 名经纪铺开；新增 Smart Match（跨经纪实时买家数据）、房源编辑器（自动写文案/定价/谈判策略）"]],
+ who:"美国顶级豪宅住宅经纪之一（NYSE: DOUG），与 Knight Frank 有全球联盟，主攻高端住宅。",serve:"高端买家卖家及其 6600 名经纪人；2026 战略是国际扩张 + AI 工具驱动增长。",edge:"顶级豪宅品牌 + 6600 经纪 + Knight Frank 全球网络。",need:"经纪人要在高端市场更快更专业——它用白标 AI 助手武装经纪。",ai:"2025 年 10 月推出 Elli AI——给经纪人的「首创级」AI 助手 App，先在佛州、2026 向全美 6600 名经纪铺开；白标、与官网/内网打通，支持 MLS 搜索。2026 Q1 财报披露持续打磨。",fee:"加盟/佣金分成；AI 工具自用。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1],microMoat:[3,4],takeaway:"又一家豪宅龙头在 2026 把「自研 AI 助手武装经纪」当增长引擎（叠加国际扩张）。高端经纪自研 AI 助手已是 2026 标配动作，再观望就落后。",exp:{label:"Elli AI 仅旗下经纪·不可直接试",url:"",dead:true},mx:18,my:74,src:[["Elliman 推出 Elli AI·官方稿","https://www.prnewswire.com/news-releases/douglas-elliman-launches-elli-ai-assistant-302577199.html","官"],["Elli AI（HousingWire）","https://www.housingwire.com/articles/douglas-elliman-launches-ai-assistant-app/","媒"],["2026 增长靠 AI＋国际","https://www.msn.com/en-us/money/economy/douglas-elliman-targets-2026-growth-through-international-expansion-and-ai-driven-agent-tools/ar-AA1PN3sK","媒"]]},
+
+{k:"竞品",tier:"选看",name:"JamesEdition",short:"JamesEdition",cn:"全球奢侈品市场（豪宅/游艇/私人飞机）",site:"https://www.jamesedition.com/",type:{t:"🎯 直接竞品",c:"c-red"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2025",dims:[2,2,2,2],lvcap:"AI 做曝光与匹配，交易靠经纪",ml:["A","D"],cred:"推",tl:[["奢侈品聚合","2020","定位「全球奢侈品市场」，聚合豪宅/游艇/私人飞机/豪车，连接 14+ 国买卖家"],["AI 曝光匹配","2024","AI 优化奢侈房源在搜索中的曝光、对接经纪 CRM 自动发布与线索追踪"],["AI 检索时代","2025","随买家用 AI 检索资产，「让房源在 AI 搜索里被找到」成新获客课题"]],
+ who:"自我定位「全球奢侈品市场」，聚合豪宅、游艇、私人飞机、豪车，连接 14+ 国的国际买家与卖家。",serve:"服务全球高净值买家——和我们客户气质高度重叠，主打跨境寻找顶级资产的入口。",edge:"奢侈品类聚合的稀缺定位 + 国际高端流量。",need:"高净值买家想「一个地方逛遍全球顶级资产」——它做这个跨境奢侈资产入口。",ai:"AI 用在可见度与匹配端：优化奢侈房源在搜索/AI 检索中的曝光、对接经纪 CRM 自动发布与线索追踪，并通过内容引领认知。",fee:"房源刊登 / 广告 + 会员订阅。",
+ macroOn:[1,2],macroMoat:[3],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1],microMoat:[3,4],takeaway:"气质上离我们最近——跨境、奢侈、买家入口。它提醒一个新战场：当买家开始用 AI 检索资产，「让我们的房源在 AI 搜索里被找到」会变成新的获客必修课。",exp:{label:"jamesedition.com 浏览（C 端）",url:"https://www.jamesedition.com",dead:false},mx:32,my:68,src:[["jamesedition.com","https://www.jamesedition.com/"]]},
+
+{k:"竞品",tier:"选看",name:"The Agency",short:"The Agency",cn:"全球扩张的豪宅经纪 · 美国",site:"https://www.theagencyre.com/",type:{t:"🎯 直接竞品",c:"c-red"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2025",dims:[1,1,1,1],lvcap:"只用现成 AI 工具做营销/选客",ml:["D","A"],cred:"官",tl:[["品牌×社媒","2021","靠强内容与经纪人个人 IP 起家，快速全球扩张的豪宅经纪"],["用现成 AI","2024","在年度《Red Paper》里讲奢侈品牌如何用 AI——锁定全球高净值、数据驱动定价、辅助营销设计"],["停在应用层","2025","整体是 AI 的应用者而非自研者，用现成工具做营销与选客——门槛低、可马上抄"]],
+ who:"品牌与社媒驱动、快速全球扩张的豪宅住宅经纪公司，靠强内容和经纪人个人 IP 起家。",serve:"高端买家卖家；尤其擅长用内容和社媒触达年轻新富与国际买家。",edge:"强势品牌、经纪人 IP 矩阵、全球加盟网络。",need:"高端房源最缺「曝光 + 触达对的全球买家」——它用内容营销和网红效应解决获客。",ai:"它更多是 AI 的应用者而非自研者：在年度《Red Paper》里专讲奢侈品牌与经纪如何用 AI——精准锁定全球高净值买家、数据驱动定价、辅助营销设计，整体停在用现成工具提效。",fee:"加盟费 + 成交佣金。",
+ macroOn:[1],macroMoat:[2],microTitle:"放大「交易/经纪」环节（AI 只在获客前端）",micro:SEG2,microOn:[0],microMoat:[3,4],takeaway:"代表多数豪宅经纪的真实状态：不自研、但积极用现成 AI 做营销与选客。这条路门槛低、见效快，是可以马上抄的「最小可行 AI」。",exp:{label:"AI 为内部营销·不可直接试",url:"",dead:true},mx:14,my:77,src:[["The Agency《Red Paper 2025》·官方","https://blog.theagencyre.com/the-agencys-red-paper-2025-our-annual-real-estate-and-global-wealth-report/","官"]]},
+
+{k:"竞品",tier:"选看",name:"Betterhomes（迪拜）",short:"迪拜",cn:"迪拜头部经纪 + DLD 政府 AI · UAE",site:"https://www.bhomes.com/en",type:{t:"🎯 直接竞品",c:"c-red"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2025",dims:[1,2,1,2],lvcap:"经纪偏传统，AI 透明度多由政府/平台推动",ml:["A","C"],cred:"媒",tl:[["迪拜门户经纪","2022","阿联酋头部经纪；迪拜是全球高净值（含中国）免税置业热点"],["政府推 AI","2024","迪拜土地局（DLD）用 AI 提升房源准确性与透明度；行业用 AI 做智能估值与预测"],["AI 增信","2025","政府＋市场合力把房源真实性、估值 AI 标准化，整体降低跨境买家信任门槛"]],
+ who:"Betterhomes 是阿联酋头部房产经纪；迪拜是全球高净值（含中国）买家最热的免税置业目的地之一。",serve:"全球高净值买家（含中国/印度/欧/俄），冲着免税回报、产权与黄金签证而来。",edge:"迪拜门户级品牌经纪 + 政府强力推动的数字化/AI 基础设施。",need:"跨境买家要在陌生市场判断「值不值、可不可信」——迪拜用政府+经纪的 AI 提升透明度。",ai:"值得注意的是政府层面：迪拜土地局（DLD）用 AI 提升房源准确性与透明度；行业用 AI 做智能估值与市场预测，经纪与开发商普遍叠加沉浸式看房与预测分析。",fee:"成交佣金（迪拜买方佣金常见约 2%）。",
+ macroOn:[1,2,3],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1],microMoat:[3],takeaway:"迪拜的启发是「政府+市场合力用 AI 做透明度」——当目的地把房源真实性、估值都 AI 标准化，跨境买家的信任门槛被整体降低。选哪些目的地、如何借当地 AI 给客户增信，是可操作的一招。",exp:{label:"bhomes.com（C 端）",url:"https://www.bhomes.com/en",dead:false},mx:28,my:68,src:[["AI in Dubai Real Estate","https://www.providentestate.com/blog/ai-in-dubai-real-estate/"],["Gulf News: AI 估值预测","https://gulfnews.com/business/property/ai-set-to-transform-dubai-real-estate-with-smarter-valuations-and-predictions-1.500377806"]]},
+
+{k:"样板",tier:"必看",name:"Compass",short:"Compass",cn:"全美最大住宅经纪（2026 并购 Anywhere）· 美国",site:"https://www.compass.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026-01",dims:[2,3,3,3],lvcap:"全套 copilot + 语音主动助手，不替代经纪",ml:["B","A"],cred:"官",tl:[["起步·科技经纪","2012","以「科技驱动经纪」起家，多年累计约 15 亿美元自建 CRM／营销／工作流平台，把经纪锁进生态"],["客户门户","2025·02","推出 Compass One——业内首个客户端一体化仪表盘，把「客户关系」也搬上平台"],["AI 跃迁","2025·06","Compass AI 新阶段：主动式、语音激活助手，自动起草邮件、跟进、营销内容，按买家行为主动浮出跟进机会"],["并购 Anywhere","2026·01","与 Anywhere（Coldwell Banker／苏富比国际／世纪21／Corcoran 母公司）合并为一家，统一到 Compass 一套技术平台——AI 能力一夜规模化到数十万经纪"]],
+ who:"按成交额计全美最大的住宅地产经纪公司，2012 年以「科技驱动经纪」起家，主攻中高端住宅。",serve:"两端客户：买卖房的消费者，以及加盟它的经纪人——用一整套软件把经纪锁在生态里。",edge:"累计约 15 亿美元技术投入、庞大经纪队伍、专有工作流平台。",need:"经纪人苦于工具割裂、效率低——它用一体化平台 + AI 把经纪武装到牙齿。",ai:"2025 年 6 月 CEO Reffkin 公布「Compass AI」新阶段（建在累计约 15 亿美元技术投入上），并推出主动式、语音激活的 AI 助手做实时支持与自动化，外加 AI 版 CRM、营销内容生成、房源洞察、智能客户匹配。定位明确——让技术管行政、让经纪做关系。",fee:"软件对旗下经纪免费，公司靠经纪佣金分成赚钱。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1,5],microMoat:[3,4],takeaway:"「武装经纪人」路线的标杆，也给出数量级参照：砸约 15 亿美元自建平台，护城河是「专有工作流 + 把经纪锁进生态」。2026 年 1 月并购 Anywhere 后，这套 AI 平台一夜覆盖数十万经纪——单点工具谁都能买，真正壁垒是把 AI 深嵌进经纪日常、再用并购把规模一次性拉满。",exp:{label:"Compass AI 仅旗下经纪·不可直接试",url:"",dead:true},mx:25,my:65,src:[["Compass×Anywhere 合并·投资者公告","https://investors.compass.com/news/news-details/2026/Compass-and-Anywhere-Real-Estate-Begin-a-New-Chapter-as-One-Company-Built-for-Real-Estate-Professionals/default.aspx","官"],["Compass AI 发布·官方","https://www.compass.com/newsroom/press-releases/4jOjK5Ej4ai0SyAnZGGlpP/","官"],["CEO 揭幕 AI 平台","https://www.agenthunter.io/news/2025/06/04/compass-ceo-unveils-ai-platform-to-transform-real-estate-agents","媒"]]},
+
+{k:"样板",tier:"必看",name:"The Real Brokerage（Leo）",short:"Real/Leo",cn:"AI 驱动经纪平台 · 美国/加拿大",site:"https://www.onereal.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"AI-Native",c:"c-green"},date:"2026-06",latest:"2026-03",dims:[3,3,3,2],lvcap:"Leo 给经纪/客户做 AI 助手，做消费者 AI 礼宾",ml:["A","B"],cred:"官",tl:[["AI 原生平台","2023","上市 AI 驱动经纪（NASDAQ: REAX），Leo CoPilot 做经纪 AI 助手"],["收 Flyhomes","2025·07","收购 Flyhomes 找房门户并入 Leo for Clients，做面向消费者的 AI 礼宾"],["HeyLeo＋并购 RE/MAX","2026·03","推出 HeyLeo——买家发短信即用的对话式找房礼宾（20 州 beta，边聊边学偏好）；Leo CoPilot 升级语音优先；并购 RE/MAX（约 8.8 亿美元）后 Leo 将服务 18 万名经纪"]],
+ who:"上市的 AI 驱动经纪平台（NASDAQ: REAX），主打用技术重塑经纪、买家、卖家的交易体验。",serve:"加盟经纪人及其客户；既给经纪配 AI 助手，也开始给消费者做 AI 服务。",edge:"AI 原生平台 + 快速扩张的经纪网络 + 自有 AI 助手 Leo。",need:"经纪和买家都被复杂交易流程拖累——它用 AI 助手把流程简化。",ai:"2025 年 7 月收购 Flyhomes 的 AI 找房门户，并入它的 Leo for Clients——目标是给消费者提供「可通过短信随时调用的 AI 礼宾」；Leo 同时是给经纪人的 AI 助手。",fee:"经纪佣金分成 + 金融与附加服务。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1,5],microMoat:[3,4],takeaway:"最值得警惕也最值得学的方向：HeyLeo 让买家发短信就能用 AI 找房、还边聊边学偏好——「控制点搬家」的现在进行时。再叠加 2026 年并购 RE/MAX（Leo 将覆盖 18 万经纪），与 Compass×Anywhere 是同一剧本：用 AI＋并购同时抢规模和买家入口。谁拥有买家随身的 AI 入口，谁就握住关系。",exp:{label:"HeyLeo.com 对话找房（C 端·选定市场）→直接试",url:"https://www.heyleo.com",dead:false},mx:30,my:42,src:[["HeyLeo 消费者对话搜索·投资者公告","https://investors.onereal.com/news/news-details/2025/Real-Doubles-Down-on-AI-With-Launch-of-HeyLeo--A-Gamechanging-Conversational-Search-Experience-for-Consumers/default.aspx","官"],["HeyLeo 礼宾（HousingWire）","https://www.housingwire.com/articles/meet-heyleo-reals-ai-concierge-that-lets-homebuyers-talk-their-way-to-a-dream-home/","媒"],["Real×RE/MAX 合并·Leo 服务 18 万经纪","https://www.stocktitan.net/sec-filings/RMAX/425-re-max-holdings-inc-business-combination-communication-c53c392a92c0.html","媒"]]},
+
+{k:"样板",tier:"推荐",name:"贝壳 / 如视 Realsee",short:"贝壳/如视",cn:"中国最大居住平台（规模样板·非竞品）",site:"https://www.ke.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026",dims:[3,3,3,4],lvcap:"AI 自动跑风控与 3D；FY2026 AI 提效为增长引擎",ml:["C","B"],cred:"官",tl:[["真房源＋ACN","2021","用 ACN 合作网络＋海量真房源数据建信任；如视做 VR/3D 看房"],["AI 风控＋3D","2025·10","贝壳用 AI 实时风控、自动标记超 1.6 万套高风险房源；如视 × 美国 Linkhome AI 把 AI＋3D 推向全球"],["空间大模型 Argus","2026","如视发布空间大模型 Argus（已开放免费测试）、数字空间超 5800 万个/48 亿㎡；AI 经纪提效列为 FY2026 增长引擎"]],
+ who:"中国最大的居住服务平台，用 ACN 合作网络把数十万经纪人连在一起；旗下如视 Realsee 做 VR/3D 看房。",serve:"中国内地买卖租房消费者；解决「房源虚假、信息不透明、跨经纪协作难」的痛点。",edge:"超 1 亿套房源数据、ACN 网络、世界领先的 3D 重建技术。",need:"中国买房最怕假房源、信息不透明——它用技术把「真房源、真信任」标准化。",ai:"两条线：①如视的全球领先 3D 看房，2025 年 10 月与美国 Linkhome AI 结盟把 AI+3D 推向全球；②贝壳把 AI 用在房源风控与运营——实时高频分析、自动标记超 1.6 万套高风险房源。进入 2026，AI 驱动的经纪提效被列为 FY2026 核心增长引擎（Q1 财报）。",fee:"交易佣金分成、平台服务费；如视 3D/VR 对外做 SaaS。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[1,2],microMoat:[4],takeaway:"「规模 + 数据」的样板：用 AI 做房源风控、把 VR 看房做成基础设施，本质是「用技术标准化信任」。跨国看房的 VR/3D、房源真实性核验可直接借鉴。",exp:{label:"Realsee 3D 看房 demo →直接试",url:"https://realsee.ai",dead:false},mx:45,my:60,src:[["如视 Realsee 官网·空间大模型 Argus","https://www.realsee.com/","官"],["如视 × Linkhome AI 合作","https://www.stocktitan.net/news/LHAI/linkhome-holdings-inc-announces-strategic-partnership-with-beike-q1q5z97zvbn1.html","媒"],["贝壳 AI 风控（36kr）","https://eu.36kr.com/en/p/3550052658411656","媒"]]},
+
+{k:"样板",tier:"推荐",name:"Rechat（Lucy）",short:"Rechat",cn:"给经纪人的 AI 超级 App · 美国",site:"https://rechat.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"AI-Native",c:"c-green"},date:"2026-06",latest:"2026-04",dims:[3,3,3,2],lvcap:"主动型助手自动管营销/任务/交易，不碰关系",ml:["B","C"],cred:"官",tl:[["地产超级 App","2023","把联系人/房源/营销/成交整合成经纪 AI 超级 App"],["Lucy 主动助手","2025","推出 Lucy——号称地产首个「主动型」AI 助手：自动生成营销物料、管理任务、辅助沟通与成交"],["AI Memo","2026·04","推出 AI Memo：实时捕捉/转写/结构化客户对话→可执行洞察，全量用户免费——把「会议记忆」做进 copilot"]],
+ who:"给企业级经纪机构和经纪人的「AI 超级 App」，把联系人、房源、营销、交易整合到一个平台。",serve:"中大型经纪机构及其经纪人；解决在割裂工具间反复切换的老问题。",edge:"地产垂直的深度工作流集成 + 主动型 AI 引擎。",need:"经纪人时间被零碎工具吃掉——用一个主动 AI 助手把营销/任务/交易自动串起来。",ai:"2025 年推出 Lucy，号称「地产首个主动型 AI 助手」：与联系人、房源、营销、成交全打通，主动生成营销物料、管理任务、辅助客户沟通与交易管理——经纪人 copilot 的纯粹形态。",fee:"面向经纪机构的 SaaS 订阅。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1,5],microMoat:[3,4],takeaway:"「AI 增强经纪人」的最纯样本——不碰客户关系，只让经纪人更强。与其从零造 AI，不如看能否用这类 copilot 把豪宅顾问的营销、跟进、交易管理自动化，把人腾到信任与谈判。",exp:{label:"Lucy 需预约 demo·不可直接试",url:"",dead:true},mx:22,my:70,src:[["Rechat 推出 AI Memo（RISMedia）","https://www.rismedia.com/2026/04/08/rechat-launches-ai-memo-to-capture-agent-conversations-in-real-time/","媒"],["Lucy 助手·官方说明","https://help.rechat.com/guides/lucy-your-ai-assistant","官"],["2026 地产 AI 现状报告·官方","https://lucy.rechat.com/2026-state-of-ai-real-estate","官"]]},
+
+{k:"样板",tier:"推荐",name:"HouseCanary",short:"HouseCanary",cn:"AI 估值 / 投资分析 · 美国",site:"https://www.housecanary.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"AI-Native",c:"c-green"},date:"2026-06",latest:"2026",dims:[3,1,4,4],lvcap:"AI 自动出估值与投资评分，决策靠人",ml:["D","C"],cred:"官",tl:[["估值数据起家","2023","AI 估值（AVM）＋投资分析，覆盖 1.36 亿套房产，AVM 中位误差约 3%"],["CanaryAI","2025","推出 CanaryAI 助手：自然语言问答，从 1.36 亿套房产数据秒出估值/预测/投资评分"],["下沉到经纪","2026","面向认证经纪推出 19 美元/月起版本（含 CanaryAI＋估值报告），把机构级 AI 估值平民化"]],
+ who:"AI 驱动的房地产数据与分析公司，覆盖超 1 亿套美国住宅，核心产品就是估值与投资分析。",serve:"投资人、放贷机构、估价师、经纪；他们要快速准确判断「这套值多少、未来怎么走、该不该投」。",edge:"1 亿+套房产数据库 + 行业领先精度的自有 AVM 模型。",need:"房产估值与投资决策充满不确定性——它用 AI 几秒给出可信的估值与回报判断。",ai:"核心就是 AI 本身：自动估值模型（AVM）、对比市场分析（CMA）、3 年市场预测、租金估算、投资评分，主打行业领先估值精度，几秒出结果。",fee:"约 10 美元/月轻量版到企业定制不等。",
+ macroOn:[3],macroMoat:[],microTitle:"放大「金融/法律（估值·尽调）」子链",micro:SEG3,microOn:[0,1,4],microMoat:[],takeaway:"代表 AI 在「资产级判断」上的成熟度——估值、预测、投资评分都能秒出。跨境豪宅的「值不值、回报如何」正是高净值客户最需要、又最难自判的；把这类 AI 分析包装成顾问能力，可能是差异化的一招。",exp:{label:"housecanary.com 估值工具 →直接试",url:"https://www.housecanary.com",dead:false},mx:55,my:66,src:[["CanaryAI·官方产品页","https://www.housecanary.com/products/canary-ai","官"],["HouseCanary 官网","https://www.housecanary.com/","官"],["HouseCanary 评测 2026","https://aiandrealtors.com/review-housecanary","媒"]]},
+
+{k:"样板",tier:"推荐",name:"EliseAI",short:"EliseAI",cn:"对话 AI 自驾（AI 原生·租赁/物管→医疗）· 美国·纽约",site:"https://www.eliseai.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"AI-Native",c:"c-green"},date:"2026-06",latest:"2025-08",dims:[4,2,4,3],lvcap:"限定域 7×24 自驾，签约/纠纷转人",ml:["A","D"],cred:"官",tl:[["创立即 AI","2017","作为 MeetElise 成立——从第一天就是 AI 原生：对话 AI 自动回租客咨询、约看房，没有「先人工、再加 AI」的包袱"],["平台化","2024","D 轮 7500 万美元、估值破 10 亿（独角兽）；对话 AI 扩成全套——VoiceAI 电话、AI 自助看房、续租、催缴"],["规模自驾","2025·08","E 轮 2.5 亿美元（a16z 领投）、估值 22 亿；ARR 破 1 亿、团队 150→300+；同一套自驾能力复制到医疗前台"]],
+ who:"为住宅租赁与物业管理提供「全渠道对话 AI」的美国公司，近年扩展到医疗。",serve:"美国大型公寓业主和物管机构；它们每天要应对海量租客咨询、看房预约与续租催缴。",edge:"多年真实对话数据飞轮 + 地产话术与系统的垂直深耕。",need:"前台人力成本高、又必须 7×24 即时响应——它用对话 AI 端到端接管前台。",ai:"AI 自主度极高：租赁沟通与续租催缴基本做到 L4 自驾——不需人逐条审核，AI 自行 7×24 完成答疑、约看、跟进，只有签约和纠纷才转人工。最颠覆的是组织层「人效解耦」：几个人配合 AI 接住百万级对话。",fee:"SaaS 订阅，按公寓单元（per unit/门）每月计费。",
+ macroOn:[4],macroMoat:[],microTitle:"放大「持有/资管（租赁运营）」子链",micro:SEG4,microOn:[0,1,2],microMoat:[],takeaway:"它把尖锐问题摆到面前：豪宅交易里哪些环节能像它一样 AI 自驾？边界清晰——答疑、初筛、看房协调可 L4 自动化；信任、跨境谈判、临门一脚短期交不出去。这条「能自驾 vs 必须留人」的边界，几乎就是我们 AI 战略的分界线。",exp:{label:"需预约 demo·不可直接试",url:"",dead:true},mx:20,my:26,src:[["EliseAI 官方·E 轮 2.5 亿美元","https://eliseai.com/blog/eliseai-raises-250m-series-e","官"],["$250M a16z 领投·FierceHealthcare","https://www.fiercehealthcare.com/ai-and-machine-learning/eliseai-banks-250m-a16z-bessemer-venture-partners-grow-its-healthcare","媒"],["eliseai.com 产品","https://www.eliseai.com/","官"]]},
+
+{k:"样板",tier:"推荐",name:"Square Yards",short:"Square Yards",cn:"印度 proptech 独角兽（含 NRI 跨境）",site:"https://www.squareyards.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026",dims:[3,3,4,3],lvcap:"自建 AI/数据平台并产品化外销，撮合仍靠顾问",ml:["C","B"],cred:"官",tl:[["一体化平台","2023","印度 proptech 独角兽，找房→按揭→资管一站式；含 NRI 跨境买家"],["AI/数据产品化","2025","用 AI/ML/地理空间/VR 做沉浸看房；把自研「数据智能」平台对外卖给银行/保险/房贷（B2B 第二曲线）"],["ChatGPT 上架＋获奖","2026","成为首个上架 ChatGPT 的印度找房 App；数据智能平台获 ET 2026「年度 Proptech 创新」，5000 万+ 交易数据 AI 处理"]],
+ who:"印度 proptech 独角兽（Gurugram），一体化房产交易+按揭+资管平台，也服务海外印度裔买家（NRI）。",serve:"印度本地及海外印度裔买家；要的是从找房到贷款、过户的一站式。",edge:"一体化交易链 + 自研 AI/数据智能平台（已产品化对外）。",need:"印度购房流程割裂、信息差大——它用 AI+ML+地理空间+VR 做沉浸、个性化体验把全链打通。",ai:"用 AI、机器学习、地理空间智能、VR 做超个性化沉浸看房；更进一步把自研「AI & 数据智能」平台产品化，对外卖给银行、保险、地产、房贷机构（B2B）。",fee:"交易佣金 + 按揭/金融分成 + AI/数据平台 B2B 订阅。",
+ macroOn:[1,2,3],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1,2],microMoat:[3],takeaway:"它走得比多数竞品远——不只用 AI，还把自建 AI/数据能力做成对外产品。当数据与 AI 能力攒够，它本身能变成第二条收入曲线（B2B 输出），值得长期想。",exp:{label:"squareyards.com（C 端）",url:"https://www.squareyards.com/",dead:false},mx:40,my:64,src:[["数据智能获 ET 2026 创新奖·官方","https://www.squareyards.com/blog/square-yards-proptech-innovation-et-real-estate-awards-2026","官"],["首个上架 ChatGPT 的印度找房 App","https://realtynmore.com/square-yards-launche-search-app-on-chatgptplatform/","媒"],["Square Yards AI（Inc42）","https://inc42.com/features/how-square-yards-is-turning-ai-data-intelligence-into-a-growth-engine/","媒"]]},
+
+{k:"样板",tier:"推荐",name:"Sprift",short:"Sprift",cn:"英国房产数据 / 一键尽调 · UK",site:"https://sprift.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"AI-Native",c:"c-green"},date:"2026-06",latest:"2026-05",dims:[2,1,3,4],lvcap:"自动聚合数据出尽调报告，判断靠人",ml:["C","B"],cred:"官",tl:[["全英数据库","2023","聚合超 3000 万套英国房产、300+ 数据点，一键出 lender-ready 尽调报告"],["AI 写报告","2025","AI 分析房产仪表盘、按受众与语气秒生成营销级房源介绍与卖点"],["嵌入工作流","2026·05","重做交互式房产报告；与 Brickflow 等合作把「关键房产事实」一键嵌入券商/房贷工作流"]],
+ who:"英国领先的房产数据平台，聚合超 3000 万套英国房产、300+ 数据点，一键生成结构化的「关键房产事实」尽调报告。",serve:"经纪、过户律师、贷款经纪；要快速、可信地核验一处房产的全貌。",edge:"覆盖全英、300+ 数据点的实时房产数据库 + API。",need:"房产尽调耗时、数据散——它把分散数据一键聚成「贷方可用」的尽调报告。",ai:"用数据聚合与自动化把 300+ 数据点实时拉齐，一键产出 lender-ready 尽调报告，并通过 API 嵌入券商/金融工作流。",fee:"SaaS 订阅 + API 调用计费。",
+ macroOn:[3],macroMoat:[],microTitle:"放大「金融/法律（尽调）」子链",micro:SEG3,microOn:[0,2,3],microMoat:[],takeaway:"直接对应我们最痛的「跨境尽调」。把分散的产权、税务、市场数据一键聚成客户能看懂的尽调报告，是高价值且 AI 擅长的活——可借鉴或采购，做成「丽兹行尽调一页纸」。",exp:{label:"sprift.com 需 demo·不可直接试",url:"",dead:true},mx:55,my:62,src:[["Sprift 官网·房产报告","https://sprift.com/property-reports","官"],["Sprift×Brokers 即时数据（2026/5）","https://www.introducertoday.co.uk/breaking-news/2026/05/sprift-partnership-provides-brokers-with-instant-data/","媒"],["Brickflow 集成 Sprift 报告","https://itbrief.co.uk/story/brickflow-adds-sprift-property-data-reports-for-brokers","媒"]]},
+
+{k:"样板",tier:"推荐",name:"Propseller",short:"Propseller",cn:"新加坡科技型经纪 · 1% 佣金",site:"https://propseller.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"AI-Native",c:"c-green"},date:"2026-06",latest:"2025",dims:[2,3,3,3],lvcap:"受薪 agent + AI 把人效拉到 26 倍，佣金压到 1%",ml:["A","B"],cred:"官",tl:[["科技型经纪","2018","新加坡创立：自有受薪 agent ＋ 软件 ＋ AI，挑战传统佣金制"],["数据驱动全流程","2022","实时告诉客户每一步成交概率、咨询/看房数据；AI＋百人专家团支撑受薪 agent"],["26 倍人效·1% 佣金","2025","AI 把单个 agent 成交量拉到行业平均 26 倍，于是能用固定 1% 佣金（vs 传统 2%+）抢市场还盈利"]],
+ who:"新加坡科技型房产经纪（2018 创立），把自有受薪 agent + 软件 + AI 组合，让单个 agent 成交量达普通中介 26 倍。",serve:"新加坡买卖房业主/买家；要透明、低费、高效的交易。",edge:"受薪 agent + 数据/AI 驱动的标准化流程 + 透明定价。",need:"传统佣金不透明又贵——它用 AI 把 agent 效率拉满，从而能把佣金压到 1% 还盈利。",ai:"数据驱动全流程：实时告诉客户每一步的成交概率、咨询/看房数据，AI + 100 人专家团队支撑受薪 agent，使其成交量达行业平均 26 倍。",fee:"固定 1% 佣金（vs 传统 2%+），靠 AI 提效摊薄成本。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节的子链",micro:SEG2,microOn:[0,1,2],microMoat:[3],takeaway:"对佣金制经纪最直接的警钟：它不去中介，而是用 AI 重构经纪经济学——受薪 agent + AI 把人效拉到 26 倍，于是能用 1% 佣金抢市场。当对手用 AI 把单位成本打下来，高佣金需要更强的「值这个价」的理由（关系、跨境、私盘）。",exp:{label:"propseller.com（C 端·新加坡）",url:"https://propseller.com/",dead:false},mx:25,my:38,src:[["Propseller About","https://propseller.com/about/"],["TechCrunch","https://techcrunch.com/2022/08/29/singapore-based-propseller-uses-data-to-take-the-hassle-out-of-real-estate-transactions/"]]},
+
+{k:"样板",tier:"推荐",name:"Matterport",short:"Matterport",cn:"3D 数字孪生 + AI · 美国（被 CoStar 收购）",site:"https://matterport.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2025-02",dims:[2,2,4,4],lvcap:"AI 自动出空间数据，仍是看房/营销工具",ml:["A","C"],cred:"官",tl:[["数字孪生先驱","2021","把实体空间变成可交互 3D 数字孪生（NASDAQ: MTTR），全球最大空间数据网络"],["Property Intelligence","2025","AI 给每个数字孪生自动标注面积/房间尺寸；2025 冬季版加更多 AI 自动化与工作流"],["并入 CoStar","2025·02","被 CoStar 收购（2/28 完成）：1400 万+ 空间、500 亿平方英尺、177 国数据，合力加码 AI/计算机视觉做房产分析"]],
+ who:"数字孪生与空间数据捕捉的先驱（NASDAQ: MTTR），把实体空间变成可交互的 3D 数字孪生；2025 年 2 月被 CoStar 收购。",serve:"经纪、开发商、物管——用于房产营销、远程看房、设施管理。",edge:"全球最大的空间数据捕捉网络 + 3D 数字孪生技术。",need:"远程/跨国看房难、空间信息难量化——用 3D + AI 把房子搬上线、自动量化。",ai:"核心产品 Property Intelligence 用 AI 给每个数字孪生自动标注面积、房间尺寸等关键数据；2025 冬季版加入更多 AI 自动化与工作流工具。",fee:"SaaS 订阅 + 企业方案。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节（看房可视化）",micro:SEG2,microOn:[1,2],microMoat:[],takeaway:"跨国看房的基础设施级能力。豪宅跨境买家无法频繁实地看房，3D 数字孪生 + AI 自动空间数据，是把「远程看房」做到可信的现成方案，可直接采购集成。",exp:{label:"matterport.com 看 3D demo →直接试",url:"https://matterport.com/discover",dead:false},mx:38,my:58,src:[["CoStar 完成收购 Matterport·官方","https://www.costargroup.com/press-room/2025/costar-group-completes-acquisition-matterport-ushering-new-era-3d-digital-twins-and","官"],["Matterport 2025 冬季版·官方","https://matterport.com/news/matterport-2025-winter-release-productivity-multiplied-delivers-the-next","官"],["CoStar×Matterport 加码 AI","https://www.engineering.com/costar-acquires-matterport-to-expand-ai-digital-twin-tech/","媒"]]},
+
+{k:"样板",tier:"选看",name:"Zillow",short:"Zillow",cn:"美国最大房产门户",site:"https://www.zillow.com/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026-03",dims:[2,2,3,4],lvcap:"AI 接管搜索与估值，决策在用户",ml:["A","D"],cred:"官",tl:[["Zestimate 起家","2006","用 AI 估价（Zestimate）＋海量房源数据，做成全美最大房产门户"],["自然语言找房","2023","业内首创自然语言搜索：用大白话按通勤/可负担性/学区找房"],["AI Mode","2026·03","推出对话式 AI Mode：边聊边懂房、算可负担性、比选、直接约看/接经纪——买家入口对话化"]],
+ who:"美国最大的房地产门户，月活上亿，主要服务找房的消费者，同时把买家线索卖给经纪变现。",serve:"普通购房/租房者；解决「找房、估价、了解市场」的信息门槛。",edge:"全美最完整的房源与房价数据、海量消费者流量。",need:"普通人买房信息不对称、不会估价——用数据和 AI 把这些变成人人可用。",ai:"AI 主要在发现与估值两端：自然语言找房（2023 业内首创、持续升级），用大白话按通勤、可负担性、学区搜房；再加 Zestimate AI 估价和个性化推荐。",fee:"向经纪卖线索（Premier Agent）、卖广告；消费者免费。",
+ macroOn:[1],macroMoat:[],microTitle:"放大「交易/经纪」环节（AI 只在发现端）",micro:SEG2,microOn:[0,1],microMoat:[],takeaway:"Zillow 证明 AI 在「发现」环节已很成熟。买家越来越习惯「用大白话跟 AI 描述梦想之家」，若入口被买方 AI 接管，门户与经纪的「找房」价值会被稀释——要想清楚发现之后、AI 还做不好的环节（信任、私盘、跨境）如何加固。",exp:{label:"Zillow 自然语言搜索 →直接试",url:"https://www.zillow.com/homes/",dead:false},mx:35,my:54,src:[["Zillow 推出 AI Mode·官方稿","https://www.prnewswire.com/news-releases/zillow-debuts-ai-mode-bringing-guided-intelligence-to-every-step-of-the-housing-journey-302724267.html","官"],["Zillow AI Mode（RISMedia）","https://www.rismedia.com/2026/03/25/zillow-debuts-ai-mode-delivering-guided-intelligence-to-the-housing-journey/","媒"],["Zillow 自然语言搜索升级·官方","https://www.zillow.com/news/zillows-ai-powered-home-search-gets-smarter-with-new-natural-language-features/","官"]]},
+
+{k:"样板",tier:"选看",name:"Collov AI",short:"Collov",cn:"AI 虚拟装修 / staging · 美国",site:"https://collov.ai/",type:{t:"🏆 领先样板",c:"c-blue"},native:{t:"AI-Native",c:"c-green"},date:"2026-06",latest:"2025",dims:[3,1,4,2],lvcap:"一键自动生成装修效果，几乎无需人工",ml:["D"],cred:"官",tl:[["AI 虚拟装修","2022","生成式室内设计：上传空房照片一键出精装效果图"],["一键 staging","2024","虚拟 staging、去杂物、风格切换，产出 MLS-ready 照片，几乎无需人工"],["房源呈现平民化","2025","把专业级 staging 压成几分钟、按张订阅——豪宅营销可低成本出多套风格"]],
+ who:"AI 虚拟装修与室内设计平台，一键把空房/毛坯照片变成精装、市场可用的效果图。",serve:"经纪、室内设计师、卖家；要让房源照片在几分钟内变得「能卖」。",edge:"房产垂直的生成式设计模型 + 一键工作流。",need:"房源照片差、空房难想象、专业 staging 贵——用 AI 秒级生成精装效果。",ai:"上传房间照片即可一键重新设计、虚拟 staging、去杂物、风格切换，产出 MLS-ready 照片，几乎无需人工。",fee:"SaaS 订阅（按张/按月）。",
+ macroOn:[1],macroMoat:[],microTitle:"放大「营销/获客（房源呈现）」子链",micro:["原图上传","AI 风格生成","虚拟 staging","去杂物/优化","出图上架"],microOn:[1,2,3],microMoat:[],takeaway:"AI 在「房源呈现」上已是一键级。豪宅营销讲质感，AI 虚拟 staging/装修能低成本出多套风格效果图，提升卖相与买家想象——可立即体验、立即用。",exp:{label:"collov.ai 一键试 →直接试",url:"https://collov.ai/",dead:false},mx:12,my:58,src:[["Collov AI 官网","https://collov.ai/"]]},
+
+{k:"威胁",tier:"必看",name:"NoBroker",short:"NoBroker",cn:"零经纪费平台 · 印度",site:"https://www.nobroker.in/",type:{t:"⚠️ 威胁原型",c:"c-rust"},native:{t:"AI-Native",c:"c-green"},date:"2026-06",latest:"2025",dims:[4,4,4,3],lvcap:"AI 替掉中介 + 把佣金制改成订阅制",ml:["A","C"],cred:"官",tl:[["零佣金起家","2014","以「零经纪费」切入：算法直连房东与租客，绕开中介"],["AI 撮合","2021","对话式 AI＋Google Cloud：Rent-o-meter（95% 准度预测租金）、智能推荐（宜居/通勤评分）、人脸门禁"],["订阅替代佣金","2025","AI 接管撮合/咨询/流程，订阅制（约 999 卢比起）占收入 99%——把佣金生意整个改写；累计融资约 3.69 亿美元"]],
+ who:"印度唯一规模化的「零经纪费」房产平台，用算法直接把房东和租客/买家连起来，彻底绕开中介。FY24 营收约 80 亿卢比。",serve:"想省下高额中介费的印度城市租房买房人群。",edge:"自研对话式 AI + 直连双边的网络效应 + 订阅制现金流。",need:"印度房产长期被中介垄断信息与定价——用 AI 把撮合直接做成自助。",ai:"AI 是去中介的核心引擎：自研对话式 AI 平台、用 Google Cloud 的 AI 做房东-房客端到端匹配与服务，把原本靠中介的撮合、咨询、流程全部自动化。",fee:"不靠佣金，向用户收订阅费（约 999 卢比起），外加房产服务、金融增值（订阅占收入 99%）。",
+ macroOn:[1,2],macroMoat:[],microTitle:"放大「交易/经纪」环节（AI 接管全链、无人）",micro:SEG2,microOn:[0,1,3,4],microMoat:[],takeaway:"必须直视的威胁原型：用 AI 把中介整个删掉，还把商业模式从佣金改成订阅。但它成立有前提——大众租赁、信息标准化、低信任门槛。越是高信任、跨境、非标的豪宅交易，纯去中介越难成；我们的安全区恰在它的盲区——但不能假设它永远进不来。",exp:{label:"nobroker.in 直接用（C 端）→直接试",url:"https://www.nobroker.in",dead:false},mx:60,my:18,src:[["NoBroker 的 AI 引擎","https://entrepreneur.economictimes.indiatimes.com/news/startups/beyond-rentals-how-nobroker-is-building-its-ai-engine/129094564","媒"],["Google Cloud 案例·官方","https://cloud.google.com/customers/nobroker","官"],["订阅商业模式","https://startuptalky.com/nobroker-business-model/","媒"]]},
+
+{k:"类比",tier:"必看",name:"AI @ Morgan Stanley",short:"大摩",cn:"摩根士丹利财富 AI · 美国",site:"https://www.morganstanley.com/",type:{t:"🔭 跨界类比",c:"c-plum"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2025",dims:[2,1,3,4],lvcap:"故意停在副驾，不碰投资建议与客户关系",ml:["B","C"],cred:"官",tl:[["联手 OpenAI","2023","华尔街首批：财富管理部门与 OpenAI 合作，把生成式 AI 塞进顾问后台"],["Assistant","2024","AI @ MS Assistant：自然语言秒查 10 万份专有研究、带出处；文档可及率 20%→80%，98% 顾问团队在用"],["Debrief","2025","Debrief（Whisper＋GPT-4）经同意把会议录音自动转纪要、写回 CRM、起草跟进邮件——行政全自动化，人专注关系；AskResearchGPT 覆盖 7 万+ 份研究"]],
+ who:"摩根士丹利财富管理部门联手 OpenAI 打造的内部 AI 工具，服务对象是它自己的 1.6 万名理财顾问。",serve:"它的理财顾问（间接服务高净值/超高净值客户）；让顾问把时间还给客户关系。",edge:"十万份专有研究知识库 + 顶级投顾-客户关系场景。",need:"顾问时间被查资料、写纪要、做行政消耗掉，没空陪客户——AI 塞后台解放时间。",ai:"两个产品都是副驾而非自驾：① Assistant，自然语言提问、秒级从十万份研究给带出处答案；② Debrief，经同意录会议后自动生成纪要、起草跟进邮件、写回 CRM。关键是它「故意」把 AI 停在副驾、不碰投资建议与客户关系——为守住信任与合规。",fee:"内部工具、不对外、无定价；回报体现在顾问人效 → AUM。",
+ segnote:"⚑ 跨界类比·私人财富（非地产），按「顾问后台」做类比；「人即产品」的高信任生意，与豪宅经纪最像。",macroOn:[3],macroMoat:[2],microTitle:"放大「顾问后台（研究·纪要）」子链",micro:SEG3,microOn:[0,1,3],microMoat:[4],takeaway:"离我们最近、最该借鉴的模板：同样「人即产品」，它把 AI 全塞后台、让顾问把省下的时间还给客户关系，而非替代关系。尤其 Debrief（会议→纪要→CRM→跟进）几乎可原样平移到豪宅顾问。它押注「关系不可被 AI 替代」——抄打法但别把赌注当永久安全。",exp:{label:"内部专用·不可直接试",url:"",dead:true},mx:55,my:82,src:[["AI @ Morgan Stanley","https://www.morganstanley.com/insights/articles/ai-in-real-estate-2025"]]},
+
+{k:"类比",tier:"推荐",name:"AI @ UBS（UBS Red）",short:"UBS",cn:"瑞银财富 AI · 投顾副驾",site:"https://www.ubs.com/",type:{t:"🔭 跨界类比",c:"c-plum"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026",dims:[2,1,3,3],lvcap:"co-pilot 增强投顾，不替代关系",ml:["B","C"],cred:"官",tl:[["联手微软","2024","与微软（Azure OpenAI）合作，搭建财富管理 AI 平台"],["UBS Red","2025","推出 UBS Red AI 助手：多语言、秒查产品/研究/CIO 报告（RAG 检索增强），已覆盖 5.2 万员工"],["全员＋会议简报","2026","Red 于 2026 初推向全体员工；STAAT 自动生成会前简报（组合/市场/话术），顾问每次客户会省 3-4 小时"]],
+ who:"瑞银（UBS）全球财富管理为投顾打造的 AI 助手「UBS Red」，与微软 Azure 合作搭建。",serve:"瑞银的客户投顾（间接服务高净值/超高净值客户）；目标是放大投顾产能。",edge:"海量内部研究与客户数据 + 顶级私行投顾-客户关系。",need:"投顾要服务更多客户、更快更省——AI 副驾把研究、检索、文书自动化。",ai:"UBS Red 是投顾的 AI co-pilot：用机器学习分析、自然语言生成、对内部研究做检索增强（RAG），辅助投顾洞察与客户服务；并建内部 AI Hub 快速试新用例。定位与摩根士丹利如出一辙——增强投顾、不替代关系。",fee:"内部工具、不对外、无定价。",
+ segnote:"⚑ 跨界类比·私人财富。与大摩并看：两大顶级财富管理不约而同把 AI 做成「投顾副驾」。",macroOn:[3],macroMoat:[2],microTitle:"放大「投顾后台（研究·服务）」子链",micro:SEG3,microOn:[0,1,3],microMoat:[4],takeaway:"第二个私行样本（与大摩并看）：两大顶级财富管理不约而同把 AI 做成投顾副驾、塞进后台、死守客户关系。强烈印证我们的路线——高信任生意，AI 武装人、人守关系。",exp:{label:"内部专用·不可直接试",url:"",dead:true},mx:54,my:80,src:[["UBS × 微软·Azure AI 平台","https://www.microsoft.com/en/customers/story/19796-ubs-azure","官"],["UBS 给投顾的 AI·官方","https://www.ubs.com/us/en/wealth-management/financial-advisor-experience/articles/ai-for-financial-advisors.html","官"],["UBS Red 发布","https://www.economywatch.com/ubs-launches-ubs-red-a-powerful-ai-assistant-for-advisors","媒"]]},
+
+{k:"类比",tier:"选看",name:"Christie's",short:"Christie's",cn:"佳士得 · 国际拍卖行（奢侈资产）",site:"https://www.christies.com/",type:{t:"🔭 跨界类比",c:"c-plum"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2025-03",dims:[2,1,2,3],lvcap:"AI 在估值/编目后台；鉴定真伪靠专家",ml:["B","D"],cred:"官",tl:[["专家信任生意","2023","数百年品牌＋专家网络做高价值低频资产（艺术/珠宝/收藏）的鉴定估值撮合"],["AI 进后台","2024","内部用 AI 做估值辅助、编目、图像检索与营销，鉴定真伪仍由专家把关"],["AI 专拍","2025·03","办主流拍卖行首场 AI 艺术专拍 Augmented Intelligence：34 件成交 72.8 万美元、82% 成交率、48% 千禧/Z 世代买家（也引训练数据争议）"]],
+ who:"全球顶级国际拍卖行，经手艺术品、珠宝、收藏等高价值低频资产；2025 年 3 月办了主流拍卖行首场 AI 专题拍卖 Augmented Intelligence。",serve:"全球高净值与超高净值藏家/卖家；与豪宅客群高度重叠，要稀缺资产的鉴定、估值与撮合。",edge:"数百年品牌信任 + 专家网络 + 全球顶级藏家关系。",need:"高价值非标资产最难的是「值多少、真不真、卖给谁」——靠专家信任解决，AI 做辅助。",ai:"两个层面：①把 AI 当商品——首场 AI 艺术专拍 30+ 件、成交 72.8 万美元（也引发训练数据争议）；②内部用 AI 做估值辅助、编目、图像检索与营销，但鉴定与真伪仍由专家把关。",fee:"向买卖双方收佣金（按落槌价抽成）。",
+ segnote:"⚑ 跨界类比·奢侈资产拍卖。和豪宅最像的高价值低频交易。",macroOn:[1,3],macroMoat:[2],microTitle:"放大「金融/法律（估值·鉴定）」子链",micro:SEG3,microOn:[0,1],microMoat:[2,4],takeaway:"它让 AI 进估值/编目后台，却把鉴定、真伪、信任死守在专家手里——又一个「人即产品」的高信任样本。资产真伪/估值可 AI 辅助，但「值得信」仍是人的生意。",exp:{label:"christies.com（浏览）",url:"https://www.christies.com/",dead:false},mx:58,my:78,src:[["Augmented Intelligence 成交·官方","https://press.christies.com/augmented-intelligence-totals-728784/","官"],["AI 专拍超预期（ARTnews）","https://www.artnews.com/art-news/market/christies-ai-art-sale-augmented-intelligence-controversy-surpasses-expectations-1234734870/","媒"],["The Art Newspaper","https://www.theartnewspaper.com/2025/03/05/christies-augmented-intelligence-sale","媒"]]},
+
+{k:"类比",tier:"选看",name:"Artsy",short:"Artsy",cn:"在线艺术品市场（奢侈资产）· 美国",site:"https://www.artsy.net/",type:{t:"🔭 跨界类比",c:"c-plum"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026-04",dims:[2,2,3,3],lvcap:"AI 做发现/行政；艺术判断与交易靠人",ml:["A","C"],cred:"官",tl:[["艺术品电商","2018","用专有 Art Genome Project（艺术品关联图谱）驱动个性化发现与推荐"],["AI 进画廊行政","2025","AI 快速成为画廊标准行政工具；但业界对 AI 当「创作媒介」高度怀疑"],["并购 Artnet","2026·04","与 Artnet 合并，欲做「艺术世界的在线操作系统」——发现与行情情报继续 AI 化，成交与信任仍靠画廊/专家"]],
+ who:"全球领先的在线艺术品市场，连接画廊、藏家与拍卖；2026 年 4 月与 Artnet 合并，欲做「艺术世界的在线操作系统」。",serve:"全球藏家与画廊；与豪宅藏家客群重叠，要发现、行情与交易。",edge:"专有的 Art Genome Project（映射艺术品关联的类 AI 系统）+ 海量画廊网络。",need:"艺术品发现难、行情不透明——用类 AI 的关联图谱做个性化发现与市场情报。",ai:"核心是 Art Genome Project——人工+算法映射艺术品关联，驱动个性化发现与推荐；AI 也快速成为画廊的标准行政工具，但 2026 调研显示业界对 AI 当「创作媒介」仍高度怀疑。",fee:"画廊订阅（subscription-first）+ 交易佣金。",
+ segnote:"⚑ 跨界类比·艺术品电商。高价值低频资产的线上化样本。",macroOn:[1],macroMoat:[2],microTitle:"放大「发现/撮合」子链",micro:["藏家画像","关联图谱","个性化发现","行情情报","撮合成交"],microOn:[0,1,2,3],microMoat:[4],takeaway:"它用关联图谱解决「发现」，但成交与信任仍靠画廊/专家。豪宅的「智能发现/推荐」可借其图谱思路，但别幻想 AI 替代成交端的信任。",exp:{label:"artsy.net 浏览 →直接试",url:"https://www.artsy.net/",dead:false},mx:30,my:64,src:[["Artsy·AI 如何改变艺术市场","https://www.artsy.net/article/artsy-editorial-ai-changing-art-market","官"]]},
+
+{k:"类比",tier:"选看",name:"Ten Lifestyle（Talia）",short:"Ten/Talia",cn:"高净值生活礼宾 · 英国",site:"https://tenlifestylegroup.com/",type:{t:"🔭 跨界类比",c:"c-plum"},native:{t:"+AI",c:"c-gray"},date:"2026-06",latest:"2026",dims:[3,2,3,3],lvcap:"Agentic AI 接管标准请求，高端定制靠人",ml:["A","B"],cred:"官",tl:[["高端礼宾","2023","为银行/品牌的高净值会员做 24/7 旅行/餐饮/娱乐礼宾，靠运营数据＋供应商关系"],["Talia 上线","2025","推出 Talia——Agentic AI 礼宾：WhatsApp/WeChat 多语言、自主跑发现-推荐-预订，搞不定再转人工"],["H1 2026 铺开＋白标","2026","Talia 在 H1 2026 初步铺开；下一步给银行/财富管理伙伴白标——把 Agentic 礼宾规模化"]],
+ who:"全球领先的旅行与生活方式礼宾服务商，为银行/品牌的高净值会员提供 24/7 的发现、预订与安排。",serve:"各大银行/奢侈品牌的高净值会员；要「比自己更快更好地搞定」旅行、餐饮、娱乐。",edge:"多年高端礼宾运营数据 + 全球供应商关系 + 会员信任。",need:"高净值人群时间贵、要求刁——礼宾解决「替我搞定一切」，AI 让它更快更规模化。",ai:"推出 Talia——「Agentic AI 生活方式伴侣/礼宾」，从餐饮场景起步，让 AI 自主跑发现-推荐-预订流程；定位是把人类礼宾从重复请求中解放、聚焦高端复杂需求。",fee:"B2B2C：银行/奢侈品牌为其高净值会员付费采购礼宾服务。",
+ segnote:"⚑ 跨界类比·高端生活礼宾（非地产）：与豪宅一样「高净值+重信任+人即服务」，看礼宾业如何用 Agentic AI 又不丢人味。",macroOn:[],macroMoat:[2],microTitle:"放大「高端服务（礼宾）」子链",micro:["需求理解","发现/筛选","预订/安排","跟进","高端/VIP 定制"],microOn:[0,1,2,3],microMoat:[4],takeaway:"和我们最像的「高端服务」样本：用 Agentic AI 接管标准化请求、把人留给高端复杂需求与关系。豪宅顾问也可让 AI 跑「找房-约看-资料」标准流程，人聚焦信任、谈判、定制。",exp:{label:"tenlifestylegroup.com（B2B 会员制）",url:"https://tenlifestylegroup.com/",dead:true},mx:85,my:50,src:[["Ten H1 2026 业绩·官方","https://tenlifestylegroup.com/2026/04/22/we-are-pleased-to-announce-results-for-h1-2026/","官"],["Meet Talia·Agentic AI 礼宾","https://www.linkedin.com/posts/tenlifestylegroup_meet-talia-your-new-agentic-ai-concierge-activity-7329117954640367616-e94d","官"],["Talia 口袋礼宾（TicketingBusiness）","https://www.theticketingbusiness.com/2025/08/meet-talia-concierge-services-in-your-pocket/","媒"]]}
+];
+
+const TIER={"必看":"t-must","推荐":"t-rec","选看":"t-opt"};
+function bar(v){return `<div class="track"><div class="fill" style="width:${v/4*100}%"></div></div>`}
+function dimsBox(d){return `<div class="dims"><div class="dt">AI 使用水平 · 四维</div>`+
+  d.map((v,i)=>`<div class="db"><span class="k">${DIMN[i]}</span>${bar(v)}</div>`).join("")+
+  `</div>`}
+function flow(stages,on,moat){return `<div class="flow">`+stages.map((s,i)=>{const c=on.includes(i)?"on":moat.includes(i)?"moat":"";return `<div class="fn ${c}"><div class="fd"></div><div class="fl">${s}</div></div>`}).join("")+`</div>`}
+function row(k,v){return v?`<div class="k">${k}</div><div class="v">${v}</div>`:""}
+function card(d,i){return `<div class="card" id="card${i}" data-tier="${d.tier}" data-type="${d.k}">
+  <div class="ch"><span class="nm serif">${d.name}</span><span class="tier ${TIER[d.tier]}">${d.tier==="必看"?"⭐ 必看":d.tier}</span><a class="site" href="${d.site}" target="_blank">🔗 官网</a><span class="cn">${d.cn}</span></div>
+  <div class="badges"><span class="chip ${d.type.c}">${d.type.t}</span><span class="chip ${d.native.c}">${d.native.t}</span><span class="chip c-gray">核实 ${d.date}</span>${d.latest?`<span class="chip c-fresh">最新动态 ${d.latest}</span>`:""}</div>
+  <div class="lvtagbox">${lvTag(d,i)}<span class="lvcap2">${d.lvcap}</span></div>
+  <div class="kv">
+    ${row("是谁·做什么",d.who)}${row("服务谁·画像",d.serve)}${row("凭什么能做",d.edge)}${row("解决什么需求",d.need)}<div class="k">AI 怎么用</div><div class="v">${aiVal(d)}</div>${row("怎么收费",d.fee)}
+    <div class="k">价值链位置</div><div class="v">
+      ${d.segnote?`<div class="segnote">${d.segnote}</div>`:""}
+      <div class="flowcap">行业整体价值链（从大）</div>${flow(MACRO,d.macroOn,d.macroMoat||[])}
+      <div class="zoom"><span class="ln"></span>▼ 放大该环节（到小）<span class="ln"></span></div>
+      <div class="flowcap">${d.microTitle}</div>${flow(d.micro,d.microOn,d.microMoat||[])}
+      <div class="legend"><span class="lg g"></span>AI 所在<span class="lg y"></span>必须留人<span class="lg n"></span>该链其他点</div>
+    </div>
+    <div class="k">对我们启示</div><div class="v">${d.takeaway}${mlChips(d)}</div>
+    <div class="k">去体验</div><div class="v"><a class="expbtn ${d.exp.dead?"dead":""}" href="${d.exp.url||"#"}" target="_blank">▶ ${d.exp.label}</a></div>
+    <div class="k">我的体感</div><div class="v"><textarea class="feel" id="feel${i}" data-name="${d.name}" placeholder="体验完写两句：惊艳点 / 鸡肋点 / 我们能不能用…"></textarea>
+      <div style="margin-top:6px"><button class="savebtn" onclick="saveFeel(${i})">保存体感</button><span class="feeltime" id="ft${i}"></span></div></div>
+  </div>
+  <div class="src">来源：${srcLine(d)}</div>
+</div>`}
+
+let F={tier:"all",type:"all"};
+function render(){
+  const q=(F.q||"").trim().toLowerCase();
+  const list=DATA.map((d,i)=>[d,i]).filter(([d])=>(F.tier==="all"||d.tier===F.tier)&&(F.type==="all"||d.k===F.type)&&(!q||(d.name+d.cn+d.short).toLowerCase().includes(q)));
+  document.getElementById("atlas").innerHTML=list.map(([d,i])=>card(d,i)).join("");
+  document.getElementById("atlassub").textContent=list.length+" 家";
+  hydrateFeels();
+  if(typeof buildOverview==="function")buildOverview();
+}
+function setF(btn){const g=btn.dataset.g;F[g]=btn.dataset.v;
+  document.querySelectorAll(`.fbtn[data-g="${g}"]`).forEach(b=>b.classList.remove("on"));btn.classList.add("on");render();}
+function hydrateFeels(){document.querySelectorAll(".feel").forEach(t=>{const raw=localStorage.getItem("feel:"+t.dataset.name);if(!raw)return;try{const o=JSON.parse(raw);t.value=o.t||"";const ft=document.getElementById("ft"+t.id.slice(4));if(ft&&o.ts)ft.textContent="　已保存 ✓ "+new Date(o.ts).toLocaleString("zh-CN")}catch(e){}})}
+function saveFeel(i){const t=document.getElementById("feel"+i);const o={t:t.value,ts:Date.now()};localStorage.setItem("feel:"+t.dataset.name,JSON.stringify(o));const ft=document.getElementById("ft"+i);if(ft)ft.textContent="　已保存 ✓ "+new Date(o.ts).toLocaleString("zh-CN")}
+
+// 矩阵（点击跳转到对应公司卡片）
+function jumpTo(j){F={tier:"all",type:"all",q:""};document.querySelectorAll(".fbtn").forEach(b=>b.classList.toggle("on",b.dataset.v==="all"));const sb=document.getElementById("search");if(sb)sb.value="";render();const el=document.getElementById("card"+j);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.style.boxShadow="0 0 0 3px var(--gold)";setTimeout(()=>{el.style.boxShadow=""},1700)}}
+const mx=document.getElementById("matrix");
+const byLv={};DATA.forEach((d,j)=>{const lv=lvOf(d);(byLv[lv]=byLv[lv]||[]).push(j)});
+DATA.forEach((d,j)=>{const lv=lvOf(d);const peers=byLv[lv];const k=peers.indexOf(j);
+  const baseX=(lv-1)*14+10;const jit=peers.length>1?(k/(peers.length-1)-0.5)*Math.min(11,peers.length*1.7):0;
+  const cls=d.my<40?"replace":d.my>62?"augment":"neutral";const el=document.createElement("div");el.className="dot "+cls;
+  el.style.left=(baseX+jit)+"%";el.style.top=d.my+"%";el.textContent=d.short;el.style.cursor="pointer";el.title="L"+lv+" · "+d.name;el.onclick=()=>jumpTo(j);mx.appendChild(el)});
+const us=document.createElement("div");us.className="dot us";us.style.left="5%";us.style.top="82%";us.textContent="★ 丽兹行（我们·L1）";mx.appendChild(us);
+// Level 成熟度分布
+const lvd=document.getElementById("lvdist");
+if(lvd){for(let n=1;n<=7;n++){const here=DATA.filter(d=>lvOf(d)===n);const col=document.createElement("div");col.className="lvcol"+(n>=6?" fut":"");
+  let inner=`<div class="h"><b>L${n}</b>${LVL[n]}</div>`;
+  if(n===1)inner+=`<div class="lvchip us">★ 丽兹行</div>`;
+  inner+=here.map(d=>`<div class="lvchip">${d.short}</div>`).join("");
+  if(here.length===0&&n>=6)inner+=`<div class="lvempty">空</div>`;
+  col.innerHTML=inner;lvd.appendChild(col)}}
+
+// nav active
+const secs=["why","concept","conclusion","atlas-sec"];
+window.addEventListener("scroll",()=>{let cur=secs[0];for(const id of secs){const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<120)cur=id}
+  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur))});
+
+document.getElementById("cnt").textContent=DATA.length;
+render();
+</script>
+</body>
+</html>
